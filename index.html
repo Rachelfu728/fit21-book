@@ -381,6 +381,71 @@
           </span>
         </div>
 
+        <!-- 💬 方案二：LINE 對話泡泡＋一鍵複製話術專區 -->
+        <div id="line-script-container" class="p-4 rounded-3xl bg-gradient-to-b from-[#F2FBF5] to-[#EAF7EE] border border-[#BCE8CA] space-y-3 shadow-2xs">
+          <!-- 區塊標題列 -->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span class="w-6 h-6 rounded-full bg-[#06C755] text-white flex items-center justify-center text-xs font-bold shadow-xs">
+                💬
+              </span>
+              <span class="text-xs font-bold text-[#14532D]">傅姐推薦話術（直接傳 LINE 或當場說）</span>
+            </div>
+            <span class="text-[10.5px] px-2 py-0.5 rounded-full bg-white/90 text-[#06C755] border border-[#A7F3D0] font-semibold">
+              綠色氣泡・隨點即複製
+            </span>
+          </div>
+
+          <!-- LINE 對話氣泡本體 -->
+          <div class="flex items-start gap-2.5 pt-0.5">
+            <!-- 傅姐頭像 -->
+            <div class="w-9 h-9 rounded-full overflow-hidden border border-[#A7F3D0] bg-white flex-shrink-0 shadow-2xs mt-0.5">
+              <img 
+                src="fu_jie_cozy_watercolor_1790564698305.jpg" 
+                alt="傅姐" 
+                class="w-full h-full object-cover object-top"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+              />
+              <div class="hidden w-full h-full bg-[#EBF0EC] items-center justify-center text-[10px] text-[#23412F] font-bold">傅姐</div>
+            </div>
+
+            <!-- 綠色對話氣泡 -->
+            <div class="flex-1 min-w-0">
+              <div class="text-[11px] text-[#52796F] font-medium mb-1 flex items-center gap-1">
+                <span>傅姐叮嚀</span>
+                <span class="text-[9.5px] text-[#84A98C]">・建議傳送</span>
+              </div>
+              <div class="relative bg-white p-3.5 rounded-2xl rounded-tl-xs border border-[#C6ECD2] shadow-xs">
+                <p id="line-bubble-text" class="text-[15.5px] font-medium text-[#1F2937] leading-[1.65] select-all break-words">
+                  你好，我們在做新口味試飲，幫我試飲一下好嗎？
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 動作按鈕列：一鍵複製話術 + 開啟 LINE -->
+          <div class="flex items-center gap-2 pt-1">
+            <button 
+              type="button" 
+              id="btn-copy-line-script" 
+              onclick="copyLineScript()" 
+              class="flex-1 h-11 rounded-2xl bg-[#06C755] hover:bg-[#05B34C] text-white font-bold text-xs transition-transform active:scale-[0.98] shadow-xs flex items-center justify-center gap-2"
+            >
+              <span id="btn-copy-icon">📋</span>
+              <span id="btn-copy-label">一鍵複製話術</span>
+            </button>
+            <a 
+              href="https://line.me/R/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="px-3.5 h-11 rounded-2xl bg-white border border-[#BCE8CA] hover:bg-[#F2FBF5] text-[#14532D] font-medium text-xs transition-colors flex items-center justify-center gap-1 flex-shrink-0"
+              title="切換至 LINE"
+            >
+              <span>💬</span>
+              <span>開 LINE</span>
+            </a>
+          </div>
+        </div>
 
         <!-- A ｜ 先接住你 -->
         <div class="space-y-1.5">
@@ -1304,6 +1369,14 @@
       document.getElementById('checkbox-label-text').innerText = card.actionCheck || '我完成了這個微小測試';
       document.getElementById('card-text-d').innerText = card.reminderText;
 
+      // 💬 方案二：更新 LINE 對話泡泡話術
+      const scriptText = getDialogScriptForCard(card, currentQuestion);
+      const bubbleEl = document.getElementById('line-bubble-text');
+      if (bubbleEl) {
+        bubbleEl.innerText = scriptText;
+      }
+      resetCopyButtonState();
+
       // 柔和翻頁動畫 (約 380ms)
       const el = document.getElementById('answer-card-element');
       el.classList.remove('page-turn-enter');
@@ -1312,36 +1385,147 @@
       updateFavoriteButtonState();
     }
 
-    // 取得問題對應的 3~5 個角度解答卡
-    function getAnswerCardsForQuestion(qText) {
-      if (SPECIAL_ANSWER_CARDS[qText]) {
-        return SPECIAL_ANSWER_CARDS[qText];
+    // 💬 提取或生成卡片對應的真實口語 / LINE 對話範本
+    function getDialogScriptForCard(card, qText) {
+      if (!card) return '你好，我們在做新口味試飲，幫我試飲一下好嗎？';
+
+      // 1. 若卡片本身有定義專屬對話
+      if (card.dialogScript && typeof card.dialogScript === 'string' && card.dialogScript.trim()) {
+        return card.dialogScript.trim().replace(/^[「“"']|[」”"']$/g, '');
       }
 
-      // 通用高質感延伸角度生成器（完全口語化、像面對面喝茶聊天的溫暖叮嚀）
-      return [
-        {
-          supportText: `面對「${qText}」，心裡覺得卡住非常正常。這不是你能力不好，只是現在把事情想得太複雜了。`,
-          perspectiveText: `換個角度看：回到最單純的事實。在我們店裡，事情其實很簡單：我們就是用一杯好喝的試飲做開頭，給身邊需要的人一個舒服的體驗。把那些煩惱和擔心全拿掉，先看清楚眼前最容易做的那一小步。`,
-          actionText: `今天給自己 10 分鐘，只做一件花不了多少力氣的小事（例如：自然請一個人試飲，或者發個問候關心一個老朋友），做完就給自己鼓掌，不要想太多。`,
-          actionCheck: '完成一件 10 分鐘就能搞定的小事',
-          reminderText: '把複雜的問題拆成一小步，心裡就不會慌。'
-        },
-        {
-          supportText: '越是想一次做到一百分，心裡越是容易焦慮。先放過自己，做事情本來就是一步一腳印。',
-          perspectiveText: '換個角度看：不管是別人的拒絕、還是事情暫時沒進展，都很正常。做生意就像交朋友，強求不來。只要你每次都真真誠誠對待人，不搞推銷套路，時間一長，大家心裡都明白你是個可靠的人。',
-          actionText: '回想一下今天和客人聊天的一個小細節，在紙上記下來：「我下次可以少講哪一句廢話，或者多聽哪一句話」，寫完放進口袋。',
-          actionCheck: '記下一個下次可以做得更好的小細節',
-          reminderText: '檢討方法，絕不檢討人格。'
-        },
-        {
-          supportText: '做得慢一點沒關係。那些慢慢磨出來的真功夫，才是誰也搶不走的真本事。',
-          perspectiveText: '換個角度看：不靠囤貨、不靠給人壓力，我們要做的是能長長久久做下去的事業。今天碰到的這個小卡關，正好是你以後帶夥伴時最接地氣的經驗談。把眼前的小事做好，後面的路自然會越走越順。',
-          actionText: '深呼吸三次，喝杯溫水。在便箋上寫下一件今天自己做對的小事，鼓勵一下自己，把精神留給明天。',
-          actionCheck: '寫下一件今天自己做得很棒的小事',
-          reminderText: '我現在踏實走好的每一步，都是未來能複製的能力。'
+      // 智慧引號過濾器：尋找最像日常口語話術的句子（長度 >= 6，且排除非話術詞彙）
+      const extractSpokenQuote = (str) => {
+        if (!str) return null;
+        const matches = str.match(/「([^」]+)」/g);
+        if (!matches) return null;
+        for (const m of matches) {
+          const clean = m.replace(/[「」]/g, '').trim();
+          if (clean.length >= 6 && !clean.includes('先接住你') && !clean.includes('換個角度') && !clean.includes('今天只做')) {
+            return clean;
+          }
         }
-      ];
+        return null;
+      };
+
+      // 2. 優先從行動 (actionText) 提取話術
+      const actionQuote = extractSpokenQuote(card.actionText);
+      if (actionQuote) return actionQuote;
+
+      // 3. 次選從思維 (perspectiveText) 提取話術
+      const perspQuote = extractSpokenQuote(card.perspectiveText);
+      if (perspQuote) return perspQuote;
+
+      // 4. 次選從支持 (supportText) 提取話術
+      const suppQuote = extractSpokenQuote(card.supportText);
+      if (suppQuote) return suppQuote;
+
+      // 5. 依據情境關鍵字提供自然好用的 LINE 實戰問候話術
+      const q = (qText || '').toLowerCase();
+      if (q.includes('陌生人') || q.includes('開口') || q.includes('試飲') || q.includes('第一句')) {
+        return '你好！我們在做新口味試飲，想請你試喝看看，幫我試飲一下好嗎？完全不用買喔！';
+      }
+      if (q.includes('不用') || q.includes('拒絕') || q.includes('挫折')) {
+        return '好的，完全沒問題！祝你今天順心愉快，謝謝你喔！';
+      }
+      if (q.includes('再想想') || q.includes('考慮')) {
+        return '沒問題的～這本來就要想清楚！如果有哪裡想多了解，隨時傳訊息問我，不要有壓力喔！';
+      }
+      if (q.includes('家人') || q.includes('老公') || q.includes('老婆')) {
+        return '很棒耶！注重家人的想法非常好。下次跟家人散步路過，順便帶他一起來坐坐喝杯現調飲品，親身試喝最放心！';
+      }
+      if (q.includes('貴') || q.includes('價格') || q.includes('多少錢')) {
+        return '完全理解～先不用給自己任何壓力！把身體照顧好最重要，如果有任何想了解的，我隨時都在喔！';
+      }
+      if (q.includes('已讀') || q.includes('不回') || q.includes('沒消息')) {
+        return '哈囉～前幾天的訊息你先不用急著回喔，最近工作還順利嗎？祝你今天好心情！';
+      }
+      if (q.includes('關心') || q.includes('客戶') || q.includes('售後') || q.includes('跟進')) {
+        return '哈囉～今天想關心一下你喝水跟精神狀況如何？有沒有覺得哪裡比較舒服或想調整的呢？';
+      }
+      if (q.includes('滑手機') || q.includes('冷場') || q.includes('聊天')) {
+        return '你先忙沒關係喔！這杯趁新鮮喝口感最好，如果有任何需要隨時跟我說！';
+      }
+      if (q.includes('熟人') || q.includes('朋友') || q.includes('親友')) {
+        return '哈囉～好久不見！最近過得好嗎？想跟你打個招呼，祝你今天順心！';
+      }
+      if (q.includes('新人') || q.includes('帶人') || q.includes('夥伴')) {
+        return '今天辛苦了！你今天完成的那一步已經很棒了，我們一步一步踏實走，隨時有問題我們一起討論！';
+      }
+
+      // 6. 通用兜底溫暖話術
+      if (card.reminderText) {
+        return card.reminderText.replace(/[“”「」]/g, '');
+      }
+      return '你好，我們在做新口味試飲，幫我試飲一下好嗎？';
+    }
+
+    // 📋 一鍵複製話術到手機剪貼簿
+    function copyLineScript() {
+      const bubbleEl = document.getElementById('line-bubble-text');
+      if (!bubbleEl) return;
+      const text = bubbleEl.innerText.trim();
+      if (!text) return;
+
+      const onSuccess = () => {
+        const btn = document.getElementById('btn-copy-line-script');
+        const icon = document.getElementById('btn-copy-icon');
+        const label = document.getElementById('btn-copy-label');
+        if (btn && label) {
+          btn.classList.remove('bg-[#06C755]', 'hover:bg-[#05B34C]');
+          btn.classList.add('bg-[#14532D]');
+          if (icon) icon.innerText = '✓';
+          label.innerText = '已複製！可直接切換到 LINE 貼上';
+        }
+        showToast('已複製話術！可直接切換到 LINE 貼給對方囉 💬✨');
+        
+        setTimeout(() => {
+          resetCopyButtonState();
+        }, 2500);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(onSuccess).catch(() => {
+          fallbackCopyText(text, onSuccess);
+        });
+      } else {
+        fallbackCopyText(text, onSuccess);
+      }
+    }
+
+    // 剪貼簿相容降級方案（支援更多手機瀏覽器）
+    function fallbackCopyText(text, onSuccess) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '-9999px';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        const successful = document.execCommand('copy');
+        if (successful && typeof onSuccess === 'function') {
+          onSuccess();
+        } else {
+          showToast('已為您選取文字，請長按複製');
+        }
+      } catch (err) {
+        showToast('請手動長按選取文字複製');
+      }
+      document.body.removeChild(ta);
+    }
+
+    // 重設複製按鈕狀態
+    function resetCopyButtonState() {
+      const btn = document.getElementById('btn-copy-line-script');
+      const icon = document.getElementById('btn-copy-icon');
+      const label = document.getElementById('btn-copy-label');
+      if (!btn || !label) return;
+      btn.classList.remove('bg-[#14532D]');
+      btn.classList.add('bg-[#06C755]', 'hover:bg-[#05B34C]');
+      if (icon) icon.innerText = '📋';
+      label.innerText = '一鍵複製話術';
     }
 
     // 再看一個角度
