@@ -1,0 +1,1835 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Fit21 夥伴解答之書｜卡住的時候，先找到今天的下一步</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>if(!window.tailwind){document.write('<script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"><\/script>')}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;600;700&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-warm-white: #FAF6F0;
+      --color-dark-green: #23412F;
+      --color-sage: #93A68D;
+      --color-mist-blue: #93AEB8;
+      --color-sand-gold: #CBAE86;
+      --color-berry: #D98C86;
+      --text-main: #232824;
+      --text-muted: #5E6660;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-warm-white);
+      color: var(--text-main);
+      -webkit-tap-highlight-color: transparent;
+      line-height: 1.7;
+    }
+
+    .font-serif-tc {
+      font-family: 'Noto Serif TC', Georgia, Cambria, serif;
+    }
+
+    /* 書封微立體質感 */
+    .book-cover-3d {
+      background: linear-gradient(145deg, #FDFBF7 0%, #F5EDE0 100%);
+      box-shadow: 0 18px 40px -10px rgba(35, 65, 47, 0.16),
+                  0 6px 14px -3px rgba(35, 65, 47, 0.06);
+    }
+
+    .book-spine-line {
+      background: linear-gradient(90deg, rgba(203, 174, 134, 0.55) 0%, rgba(255, 255, 255, 0.4) 30%, rgba(203, 174, 134, 0.15) 100%);
+    }
+
+    .card-shadow {
+      box-shadow: 0 10px 30px -6px rgba(35, 65, 47, 0.08),
+                  0 2px 8px -1px rgba(35, 65, 47, 0.04);
+    }
+
+    /* 輕柔翻頁動效 (約 350ms) */
+    .page-turn-enter {
+      animation: pageTurnAnim 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes pageTurnAnim {
+      0% {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* 浮動提示動畫 */
+    .toast-anim {
+      animation: toastIn 0.3s ease-out forwards;
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translate(-50%, 14px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+  </style>
+</head>
+<body class="selection:bg-[#CBAE86]/30 pb-28">
+
+  <!-- 頂部輕量品牌狀態列 -->
+  <header class="w-full bg-[#FAF6F0]/95 backdrop-blur-md border-b border-[#EAE2D5] sticky top-0 z-40 px-5 py-3.5">
+    <div class="max-w-[420px] mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-[#23412F]"></span>
+        <span class="text-xs tracking-wider text-[#23412F] font-bold">Fit21 豐盛團隊</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button 
+          type="button" 
+          onclick="switchTab('favorites')" 
+          class="text-xs px-2.5 py-1 rounded-full bg-white border border-[#DDD3C4] text-[#5E6660] hover:text-[#23412F] flex items-center gap-1 shadow-2xs"
+        >
+          <span>♡</span>
+          <span>收藏</span>
+          <span id="fav-badge-count" class="w-4 h-4 rounded-full bg-[#D98C86] text-white text-[10px] flex items-center justify-center font-bold">0</span>
+        </button>
+        <button 
+          type="button" 
+          onclick="openAdminModal()" 
+          class="text-xs px-2.5 py-1 rounded-full bg-[#EBF0EC] border border-[#D5E0D7] text-[#23412F] font-medium flex items-center gap-1 shadow-2xs"
+          title="傅姐專用管理後台"
+        >
+          <span>🔒</span>
+          <span>後台</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主操作容器：以 390px 為核心基準，左右留白 20px (px-5) -->
+  <main class="w-full max-w-[420px] mx-auto px-5 py-5 space-y-7">
+
+    <!-- ============================================== -->
+    <!-- 視圖一：首頁（解答之書封面 + 六大問題分類導航） -->
+    <!-- ============================================== -->
+    <div id="view-home" class="space-y-6">
+
+      <!-- 首頁第一屏：精緻、溫暖、微立體的解答之書 -->
+      <section class="book-cover-3d rounded-3xl p-6 border-2 border-[#E7DDCE] relative overflow-hidden text-center space-y-4">
+        <!-- 書脊燙金裝飾 -->
+        <div class="absolute left-0 top-0 bottom-0 w-4 book-spine-line border-r border-[#DECDB8]"></div>
+        <!-- 書籤緞帶 -->
+        <div class="absolute top-0 right-6 w-5 h-12 bg-[#D98C86] rounded-b-sm shadow-xs flex items-end justify-center pb-1">
+          <div class="w-1.5 h-1.5 rounded-full bg-[#FAF6F0]"></div>
+        </div>
+
+        <div class="pl-4 pr-1 py-3 space-y-2.5">
+          <div class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#EBF0EC] text-[#23412F] text-xs font-semibold border border-[#D5E0D7]">
+            <span>🌱 行動解答之書</span>
+          </div>
+
+          <h1 class="font-serif-tc text-[26px] font-bold text-[#23412F] tracking-tight leading-snug">
+            Fit21<br>夥伴解答之書
+          </h1>
+
+          <p class="font-serif-tc text-[15px] text-[#CBAE86] font-semibold tracking-wide">
+            你不需要一次走很遠，<br>只要看清今天的下一步。
+          </p>
+        </div>
+
+        <!-- 主要 CTA 按鈕 (52~56px) -->
+        <button 
+          type="button" 
+          onclick="scrollToCategories()" 
+          class="w-full h-14 rounded-full bg-[#23412F] hover:bg-[#182E21] text-[#FAF6F0] font-medium text-[16px] tracking-wide transition-all active:scale-[0.98] shadow-sm flex items-center justify-center gap-2"
+        >
+          <span>看看我卡在哪裡</span>
+          <span class="text-[#CBAE86]">↓</span>
+        </button>
+      </section>
+
+      <!-- 首頁開場語句 -->
+      <section class="bg-white/85 rounded-2xl p-4 sm:p-5 border border-[#ECE3D5] text-center space-y-1.5 shadow-2xs">
+        <p class="text-[16px] text-[#232824] font-medium leading-relaxed">
+          有些卡關，不代表你不夠好。<br>
+          只是現在的問題，還需要被好好拆開。
+        </p>
+        <p class="text-[14px] text-[#5E6660]">
+          先找找看，你現在卡在哪一關。
+        </p>
+      </section>
+
+      <!-- 六大獨立卡關面向（獨立頁面入口，徹底分離問題不連在一起） -->
+      <section id="section-categories" class="space-y-3 pt-1">
+        <div class="flex items-center justify-between px-1">
+          <span class="text-xs font-bold text-[#23412F] tracking-wide">六大卡關面向</span>
+          <span class="text-[11px] text-[#93A68D]">點選進入專屬題目頁</span>
+        </div>
+
+        <div id="category-cards-container" class="space-y-3">
+          <!-- 透過 JS 動態產出 6 大獨立分類卡片 -->
+        </div>
+      </section>
+
+      <!-- 我的問題不在上面 -->
+      <section class="bg-gradient-to-br from-[#FAF7F1] to-white rounded-3xl p-5 border border-[#DFD5C6] space-y-3 shadow-2xs">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">💭</span>
+          <h3 class="font-serif-tc text-[17px] font-bold text-[#23412F]">我的問題不在上面？</h3>
+        </div>
+        <p class="text-xs text-[#5E6660] leading-relaxed">
+          輸入一句你目前最困擾的話，系統將幫你梳理出最接近的思考環節：
+        </p>
+        <div class="space-y-2 pt-1">
+          <input 
+            id="input-custom-trouble" 
+            type="text" 
+            placeholder="例如：我今天站在門口很久，就是開不了口……" 
+            class="w-full h-12 px-3.5 rounded-xl border border-[#D5C9B8] bg-white text-[15px] text-[#232824] placeholder-[#A59D90] focus:outline-none focus:border-[#23412F]"
+          />
+          <button 
+            type="button" 
+            onclick="handleCustomTroubleSubmit()" 
+            class="w-full h-12 rounded-xl bg-[#23412F] hover:bg-[#182E21] text-[#FAF6F0] font-medium text-[15px] transition-transform active:scale-[0.98] flex items-center justify-center gap-1.5"
+          >
+            <span>幫我找出我卡在哪裡</span>
+            <span class="text-[#CBAE86]">→</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 區塊：Fit21 每日小複利 -->
+      <section id="section-daily-compound" class="bg-gradient-to-br from-[#F5EFE4] to-[#FAF6F0] rounded-3xl p-5 border border-[#E5DBCC] shadow-2xs space-y-3.5">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#93A68D]"></span>
+            <h3 class="font-serif-tc text-[17px] font-bold text-[#23412F]">Fit21 每日小複利</h3>
+          </div>
+          <button 
+            type="button" 
+            onclick="rollNewDailyAction()" 
+            class="text-xs text-[#5E6660] hover:text-[#23412F] flex items-center gap-1 underline underline-offset-2"
+          >
+            換一個行動
+          </button>
+        </div>
+
+        <div class="bg-white/95 rounded-2xl p-4 border border-[#EAE1D3] space-y-2">
+          <div class="text-xs text-[#93A68D] font-bold">今日推薦累積小步：</div>
+          <div id="daily-action-text" class="text-[16px] font-medium text-[#232824] leading-relaxed">
+            主動邀約 3 個人進店試飲
+          </div>
+        </div>
+
+        <button 
+          id="btn-trigger-daily"
+          type="button" 
+          onclick="completeDailyCompound()" 
+          class="w-full h-12 rounded-full bg-[#93A68D] hover:bg-[#7F9479] text-white text-[15px] font-medium transition-all active:scale-[0.98] shadow-xs flex items-center justify-center gap-1.5"
+        >
+          <span>✨ 今天就做這件事</span>
+        </button>
+
+        <div id="daily-feedback-box" class="hidden p-3 rounded-xl bg-[#EBF0EC] text-center text-xs text-[#23412F] font-bold">
+          ✓ 今天的小複利開始了
+        </div>
+
+        <div class="pt-1 text-center">
+          <p class="text-xs text-[#5E6660] leading-relaxed font-serif-tc">
+            「你正在累積的，不只是今天的結果，<br>
+            而是未來可以複製的能力。」
+          </p>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 視圖：獨立分類問題專頁（徹底獨立分離，不再混雜連在一起） -->
+    <!-- ============================================== -->
+    <div id="view-category" class="hidden space-y-4">
+      
+      <!-- 頂部返回六大面向與當前面向指示 -->
+      <div class="flex items-center justify-between">
+        <button 
+          type="button" 
+          onclick="switchTab('home')" 
+          class="inline-flex items-center gap-1.5 text-xs text-[#5E6660] hover:text-[#23412F] py-2 px-3.5 rounded-full bg-white border border-[#E0D7C9] shadow-2xs font-medium transition-colors"
+        >
+          <span>←</span>
+          <span>返回六大面向</span>
+        </button>
+
+        <span id="category-badge-index" class="text-xs px-3 py-1 rounded-full bg-[#EBF0EC] text-[#23412F] font-semibold border border-[#D5E0D7]">
+          面向 1 / 6
+        </span>
+      </div>
+
+      <!-- 分類標題卡片 -->
+      <div class="bg-white rounded-3xl p-5 border border-[#E5DCD0] shadow-xs space-y-3">
+        <div class="flex items-start gap-3.5">
+          <span id="category-detail-icon" class="w-12 h-12 rounded-2xl bg-[#EBF0EC] text-[#23412F] flex items-center justify-center text-2xl flex-shrink-0 mt-0.5">
+            💬
+          </span>
+          <div class="space-y-1">
+            <h3 id="category-detail-title" class="font-serif-tc text-[18px] sm:text-[19px] font-bold text-[#23412F] leading-snug">
+              第一類｜我不知道怎麼開口
+            </h3>
+            <p id="category-detail-subtitle" class="text-xs text-[#5E6660] leading-relaxed">
+              第一步往往不是不會，而是不敢。
+            </p>
+          </div>
+        </div>
+
+        <!-- 快速切換橫向標籤列 (六大類切換) -->
+        <div class="pt-2.5 border-t border-[#F0EAE1]">
+          <div class="text-[11px] text-[#93A68D] font-medium mb-1.5 flex items-center justify-between">
+            <span>切換其他卡關面向：</span>
+            <span class="text-[10px] text-[#CBAE86]">可左右滑動 ↔</span>
+          </div>
+          <div class="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none" id="category-switcher-chips">
+            <!-- JS 動態生成 6 個小藥丸按鈕 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 題目清單提示 -->
+      <div class="flex items-center justify-between px-1 pt-1">
+        <span class="text-xs font-bold text-[#23412F]">請選出最符合你當前卡關的情境：</span>
+        <span id="category-question-count" class="text-[11px] text-[#93A68D]">共 15 個問題</span>
+      </div>
+
+      <!-- 獨立問題卡片清單 (純白底、圓角卡、舒適行高、不混雜) -->
+      <div id="category-questions-container" class="space-y-2">
+        <!-- JS 動態生成 -->
+      </div>
+
+      <!-- 底部返回按鈕 -->
+      <div class="pt-4 pb-6 text-center">
+        <button 
+          type="button" 
+          onclick="switchTab('home')" 
+          class="h-11 px-6 rounded-full bg-white border border-[#D5C9B8] text-[#5E6660] hover:text-[#23412F] text-xs font-medium shadow-2xs"
+        >
+          ← 返回看其他面向
+        </button>
+      </div>
+
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 視圖二：解答卡頁面（A先接住你/B換角度/C微行動/D提醒 + 5按鈕 + 傅姐便箋） -->
+    <!-- ============================================== -->
+    <div id="view-card" class="hidden space-y-5">
+      
+      <!-- 頂部雙重導航與麵包屑 -->
+      <div class="flex items-center justify-between">
+        <button 
+          id="btn-back-to-category"
+          type="button" 
+          onclick="switchTab('category')" 
+          class="inline-flex items-center gap-1.5 text-xs text-[#5E6660] hover:text-[#23412F] py-1.5 px-3.5 rounded-full bg-white border border-[#E0D7C9] shadow-2xs font-medium transition-colors"
+        >
+          <span>←</span>
+          <span id="btn-back-to-category-label">返回題目清單</span>
+        </button>
+
+        <button 
+          type="button" 
+          onclick="switchTab('home')" 
+          class="text-xs text-[#93A68D] hover:text-[#23412F] underline underline-offset-4"
+        >
+          回到六大面向
+        </button>
+      </div>
+
+      <!-- 核心問題提問標題 -->
+      <div class="px-1 space-y-1">
+        <span class="text-xs text-[#93A68D] font-bold">你所選擇的卡關情境：</span>
+        <h2 id="card-question-title" class="font-serif-tc text-xl sm:text-[22px] font-bold text-[#23412F] leading-snug">
+          我看到陌生人，就是不敢開口
+        </h2>
+      </div>
+
+      <!-- 解答卡主體 (紙本閱讀感，輕柔翻頁動效) -->
+      <article id="answer-card-element" class="bg-white rounded-3xl p-5 sm:p-6 border border-[#E7DDCE] card-shadow page-turn-enter space-y-5 relative overflow-hidden">
+        
+        <!-- 角度切換指引 -->
+        <div class="flex items-center justify-between text-xs text-[#93A68D] border-b border-[#F0E9DC] pb-2.5">
+          <span class="flex items-center gap-1.5 font-bold">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#CBAE86]"></span>
+            <span>思考視角</span>
+          </span>
+          <span id="card-angle-indicator" class="text-[11px] px-2 py-0.5 rounded-md bg-[#FAF6F0] text-[#7A837C] font-medium">
+            角度 1 / 3
+          </span>
+        </div>
+
+        <!-- A ｜ 先接住你 -->
+        <div class="space-y-1.5">
+          <div class="inline-flex items-center gap-1 text-xs font-bold text-[#D98C86] uppercase tracking-wider">
+            <span>A ｜ 先接住你</span>
+          </div>
+          <p id="card-text-a" class="text-[16px] leading-[1.7] text-[#232824] bg-[#FDF8F7] p-3.5 rounded-2xl border border-[#F6E6E4]">
+            第一次對陌生人開口，緊張很正常。你現在不是要把一個陌生人變成客戶，你只是要完成一次自然的邀請。
+          </p>
+        </div>
+
+        <!-- B ｜ 換一個角度看 -->
+        <div class="space-y-1.5">
+          <div class="inline-flex items-center gap-1 text-xs font-bold text-[#93AEB8] uppercase tracking-wider">
+            <span>B ｜ 換一個角度看</span>
+          </div>
+          <p id="card-text-b" class="text-[16px] leading-[1.7] text-[#3D4740] bg-[#F7FAFA] p-3.5 rounded-2xl border border-[#E5EEF0]">
+            先不要想成交，也不用急著介紹 Fit21。回到最單純的事實：你現在唯一的任務，是讓對方知道這裡有一個新口味，可以進來試喝看看。他願意，就自然邀請進店；他不願意，就尊重他的選擇。話說出口，你的任務就完成了，不用替對方做決定。
+          </p>
+        </div>
+
+        <!-- C ｜ 今天只做這一步 (具體、單一主要微行動、可勾選、10~20分鐘) -->
+        <div class="space-y-2">
+          <div class="inline-flex items-center gap-1 text-xs font-bold text-[#23412F] uppercase tracking-wider">
+            <span>C ｜ 今天只做這一步 (10~20分鐘)</span>
+          </div>
+          <div class="p-4 rounded-2xl bg-[#EBF0EC]/85 border border-[#D5E0D7] space-y-3">
+            <p id="card-text-c" class="text-[16px] font-medium text-[#23412F] leading-[1.7]">
+              給自己 10 分鐘，把那些複雜的想法全丟掉：只要找 3 個適合的對象，簡簡單單講這句：<br>
+              <strong>「你好，我們在做新口味試飲，幫我試飲一下好嗎？」</strong><br>
+              今天的任務不是成交，只是完成 3 次開口。
+            </p>
+            
+            <label class="flex items-center gap-3 p-2.5 rounded-xl bg-white/90 border border-[#CCDCD0] cursor-pointer select-none">
+              <input 
+                id="checkbox-card-action" 
+                type="checkbox" 
+                onchange="handleCardCheckboxChange(this)" 
+                class="w-5 h-5 rounded text-[#23412F] focus:ring-0 border-[#93A68D]"
+              />
+              <span id="checkbox-label-text" class="text-[14.5px] font-semibold text-[#23412F]">
+                我完成 3 次開口邀約
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <!-- D ｜ 給自己的提醒 -->
+        <div class="space-y-1.5">
+          <div class="inline-flex items-center gap-1 text-xs font-bold text-[#CBAE86] uppercase tracking-wider">
+            <span>D ｜ 給自己的提醒</span>
+          </div>
+          <blockquote class="p-3.5 rounded-2xl bg-[#FAF7F0] border border-[#ECE3D5] text-[15.5px] font-serif-tc text-[#232824] italic leading-relaxed">
+            “<span id="card-text-d">我今天練的不是成交，是自然開口的能力。</span>”
+          </blockquote>
+        </div>
+
+        <!-- 解答卡 5 個操作按鈕 (高度>=48px，清楚方便點擊) -->
+        <div class="space-y-2.5 pt-2">
+          <!-- ✓ 我完成了今天這一步 -->
+          <button 
+            type="button" 
+            onclick="triggerStepCompleted()" 
+            class="w-full h-12 rounded-full bg-[#23412F] hover:bg-[#182E21] text-[#FAF6F0] font-medium text-[15px] transition-transform active:scale-[0.98] shadow-xs flex items-center justify-center gap-1.5"
+          >
+            <span>✓ 我完成了今天這一步</span>
+          </button>
+
+          <!-- 兩欄副按鈕：再看一個角度 / 收藏這張卡 -->
+          <div class="grid grid-cols-2 gap-2.5">
+            <button 
+              type="button" 
+              onclick="cycleNextAngle()" 
+              class="h-12 px-3 rounded-full bg-white border border-[#D5C9B8] hover:bg-[#FAF7F1] text-[#232824] text-[14px] font-medium transition-colors flex items-center justify-center gap-1"
+            >
+              <span>↻ 再看一個角度</span>
+            </button>
+
+            <button 
+              id="btn-toggle-favorite"
+              type="button" 
+              onclick="toggleCurrentCardFavorite()" 
+              class="h-12 px-3 rounded-full bg-white border border-[#D5C9B8] hover:bg-[#FAF7F1] text-[#232824] text-[14px] font-medium transition-colors flex items-center justify-center gap-1"
+            >
+              <span id="fav-icon">♡</span>
+              <span id="fav-text">收藏這張卡</span>
+            </button>
+          </div>
+
+          <!-- 複製這張卡 -->
+          <button 
+            type="button" 
+            onclick="copyCurrentCard()" 
+            class="w-full h-12 rounded-full bg-white border border-[#D5C9B8] hover:bg-[#FAF7F1] text-[#232824] text-[14px] font-medium transition-colors flex items-center justify-center gap-1.5"
+          >
+            <span>⧉ 複製這張卡</span>
+          </button>
+
+          <!-- 雙重返回按鈕：返回此面向題目清單 / 回六大面向首頁 -->
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <button 
+              type="button" 
+              onclick="switchTab('category')" 
+              class="h-11 rounded-full bg-white border border-[#D5C9B8] hover:bg-[#FAF7F1] text-[#23412F] text-xs font-medium transition-colors flex items-center justify-center gap-1 shadow-2xs"
+            >
+              <span>← 返回題目清單</span>
+            </button>
+            <button 
+              type="button" 
+              onclick="switchTab('home')" 
+              class="h-11 rounded-full bg-transparent hover:bg-black/5 text-[#5E6660] text-xs font-medium transition-colors flex items-center justify-center gap-1"
+            >
+              <span>⌂ 回六大面向</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 完成今天這一步的專屬回饋（小勾勾、微光、少許星點，不搞大量煙火） -->
+        <div id="box-step-feedback" class="hidden p-4 rounded-2xl bg-[#EBF0EC] border border-[#CCDCD0] text-center space-y-1.5">
+          <div class="w-8 h-8 rounded-full bg-[#23412F] text-white mx-auto flex items-center justify-center text-sm font-bold shadow-2xs">
+            ✓
+          </div>
+          <div class="text-[16px] font-bold text-[#23412F] leading-snug">
+            很好。
+          </div>
+          <p class="text-[14px] text-[#415544] leading-relaxed">
+            你不是等狀態變好才行動；<br>
+            你正在用行動，讓自己慢慢變得更穩。
+          </p>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- 結尾互動區：留一句話給傅姐（每張解答卡最下方進入） -->
+        <!-- ============================================== -->
+        <div id="section-fu-desk" class="pt-6 mt-6 border-t border-[#ECE3D5] space-y-4">
+          
+          <div class="bg-[#FAF7F0] rounded-3xl p-5 border border-[#E5DAC9] space-y-4">
+            
+            <!-- 傅姐公仔固定設定：約35歲女性、肩上短髮、戴黑框眼鏡、穿Fit21圍兜、安靜坐在小木桌旁傾聽 -->
+            <div class="flex items-start gap-3.5">
+              <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border border-[#D8CEBC] bg-white flex-shrink-0 shadow-xs relative">
+                <img 
+                  src="fu_jie_cozy_watercolor_1790564698305.jpg" 
+                  alt="傅姐（溫暖手繪水彩繪本風、肩上短髮、黑框眼鏡、穿Fit21圍兜）在暖燈木桌旁親切傾聽" 
+                  class="w-full h-full object-cover object-top"
+                  onerror="this.style.display='none'; document.getElementById('fu-char-ph').style.display='flex';"
+                />
+                <div id="fu-char-ph" class="hidden w-full h-full bg-[#EBF0EC] items-center justify-center text-xs text-[#23412F] font-bold">傅姐</div>
+                <!-- 暖燈微光點綴 -->
+                <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#D4AF37]"></span>
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <h4 class="font-serif-tc text-[18px] font-bold text-[#23412F]">
+                  想說的話，先留給傅姐。
+                </h4>
+                <p class="text-xs text-[#5E6660] leading-relaxed mt-1">
+                  有些事情不需要立刻找到答案。<br>
+                  如果你願意，可以先把現在的心情或卡住的地方留在這裡。<br>
+                  傅姐看到後，會找一個適合的時間，和你好好聊一聊。
+                </p>
+              </div>
+            </div>
+
+            <!-- 便箋留言表單（絕不設計成客服聊天室或連續對話泡泡） -->
+            <div id="fu-form-container" class="space-y-3">
+              
+              <!-- 名字或暱稱 -->
+              <div>
+                <label class="block text-xs font-bold text-[#23412F] mb-1">你的名字或暱稱：</label>
+                <input 
+                  id="input-partner-name" 
+                  type="text" 
+                  placeholder="讓傅姐知道是你" 
+                  class="w-full h-11 px-3.5 rounded-xl border border-[#D5C9B8] bg-white text-[15px] text-[#232824] placeholder-[#A59D90] focus:outline-none focus:border-[#23412F]"
+                />
+              </div>
+
+              <!-- 快速選項 -->
+              <div>
+                <div class="text-xs text-[#5E6660] font-medium mb-1.5">快速點選心情：</div>
+                <div class="flex flex-wrap gap-1.5">
+                  <button type="button" onclick="selectFuQuickOption('我有點卡住了')" class="text-xs px-3 py-1.5 rounded-full bg-white border border-[#D8CEBC] text-[#404943] hover:bg-[#EBF0EC] transition-colors">
+                    🌱 我有點卡住了
+                  </button>
+                  <button type="button" onclick="selectFuQuickOption('我想把事情做得更好')" class="text-xs px-3 py-1.5 rounded-full bg-white border border-[#D8CEBC] text-[#404943] hover:bg-[#EBF0EC] transition-colors">
+                    ✨ 我想把事情做得更好
+                  </button>
+                  <button type="button" onclick="selectFuQuickOption('我需要有人聽我說說話')" class="text-xs px-3 py-1.5 rounded-full bg-white border border-[#D8CEBC] text-[#404943] hover:bg-[#EBF0EC] transition-colors">
+                    ☕ 我需要有人聽我說說話
+                  </button>
+                </div>
+              </div>
+
+              <!-- 留言框 -->
+              <div>
+                <textarea 
+                  id="textarea-fu-msg" 
+                  rows="3" 
+                  placeholder="傅姐，我最近想跟你說……" 
+                  class="w-full p-3.5 rounded-xl bg-white border border-[#D8CEBC] text-[15px] text-[#232824] placeholder-[#A59D90] focus:outline-none focus:border-[#23412F] resize-none leading-relaxed"
+                ></textarea>
+              </div>
+
+              <!-- 送出按鈕 -->
+              <div class="flex items-center justify-between pt-1">
+                <span class="text-[11px] text-[#8C938D]">
+                  桌邊小便箋 · 傅姐親自查看
+                </span>
+
+                <button 
+                  type="button" 
+                  onclick="handleFuMessageSubmit()" 
+                  class="h-12 px-6 rounded-full bg-[#23412F] hover:bg-[#182E21] text-[#FAF6F0] text-xs sm:text-[13.5px] font-medium transition-transform active:scale-95 shadow-2xs"
+                >
+                  把這句話留給傅姐
+                </button>
+              </div>
+            </div>
+
+            <!-- 狀況 A：留言成功確認（絕對無 AI 即時自動回覆） -->
+            <div id="fu-success-confirmation" class="hidden p-5 rounded-2xl bg-white border border-[#D8CEBC] text-center space-y-2">
+              <div class="w-10 h-10 rounded-full bg-[#EBF0EC] text-[#23412F] mx-auto flex items-center justify-center font-bold text-base">
+                ✓
+              </div>
+              <div class="font-serif-tc text-[18px] font-bold text-[#23412F]">
+                已經替你留好了。
+              </div>
+              <p class="text-[14px] text-[#5E6660] leading-relaxed">
+                傅姐會在合適的時候，找你聊聊。
+              </p>
+              <div class="pt-2">
+                <button 
+                  type="button" 
+                  onclick="resetFuInputForm()" 
+                  class="text-xs text-[#93A68D] hover:text-[#23412F] underline underline-offset-4"
+                >
+                  想再寫一張便箋？
+                </button>
+              </div>
+            </div>
+
+            <!-- 狀況 B：Supabase 尚未設定時的嚴格防呆提示（絕不假裝送達！） -->
+            <div id="fu-not-configured-alert" class="hidden p-4 rounded-2xl bg-[#FFF8EB] border border-[#EED7A1] space-y-2.5 text-left">
+              <div class="flex items-start gap-2">
+                <span class="text-base text-[#CBAE86]">⚠️</span>
+                <div>
+                  <div class="text-xs font-bold text-[#684C12]">目前留言功能還在設定中。</div>
+                  <p class="text-xs text-[#7A612A] mt-0.5 leading-relaxed">
+                    你可以先把這段話複製保存，稍後再留給傅姐。
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 pt-1">
+                <button 
+                  type="button" 
+                  onclick="copyMyUnsentMessage()" 
+                  class="h-10 px-4 rounded-full bg-[#684C12] text-white text-xs font-medium"
+                >
+                  複製我的留言
+                </button>
+                <button 
+                  type="button" 
+                  onclick="openAdminModal()" 
+                  class="h-10 px-3 rounded-full bg-white border border-[#D5C9B8] text-xs text-[#5E6660]"
+                >
+                  管理員綁定 Supabase
+                </button>
+              </div>
+            </div>
+
+            <!-- 區塊底小字 -->
+            <p class="text-[12px] text-[#5E6660] text-center italic tracking-wide pt-1 leading-relaxed">
+              「在這個團隊裡，你不是自己想辦法；<br>
+              而是有人願意陪你把路看清楚。」
+            </p>
+
+          </div>
+
+        </div>
+
+      </article>
+
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 視圖三：我的收藏 (LocalStorage 離線保存) -->
+    <!-- ============================================== -->
+    <div id="view-favorites" class="hidden space-y-4">
+      <div class="flex items-center justify-between border-b border-[#EAE2D5] pb-3">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">♡</span>
+          <h2 class="font-serif-tc text-lg font-bold text-[#23412F]">我的收藏解答卡</h2>
+        </div>
+        <button 
+          type="button" 
+          onclick="switchTab('home')" 
+          class="text-xs text-[#5E6660] hover:text-[#23412F] underline"
+        >
+          返回首頁
+        </button>
+      </div>
+
+      <div id="favorites-list-container" class="space-y-3">
+        <!-- 透過 JS 渲染收藏列表 -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- 手機版底部常駐 4 項簡易導航列 -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-[#FAF6F0]/95 backdrop-blur-md border-t border-[#EAE2D5] z-30 py-2">
+    <div class="max-w-[420px] mx-auto px-4 flex items-center justify-around">
+      <button 
+        type="button" 
+        onclick="switchTab('home')" 
+        class="nav-tab-btn flex flex-col items-center gap-0.5 text-xs text-[#23412F] font-bold py-1 px-2.5"
+        id="nav-btn-home"
+      >
+        <span class="text-base">⌂</span>
+        <span>解答之書</span>
+      </button>
+
+      <button 
+        type="button" 
+        onclick="jumpToDailyCompound()" 
+        class="nav-tab-btn flex flex-col items-center gap-0.5 text-xs text-[#5E6660] hover:text-[#23412F] font-medium py-1 px-2.5"
+        id="nav-btn-daily"
+      >
+        <span class="text-base">✦</span>
+        <span>每日小複利</span>
+      </button>
+
+      <button 
+        type="button" 
+        onclick="switchTab('favorites')" 
+        class="nav-tab-btn flex flex-col items-center gap-0.5 text-xs text-[#5E6660] hover:text-[#23412F] font-medium py-1 px-2.5"
+        id="nav-btn-fav"
+      >
+        <span class="text-base">♡</span>
+        <span>我的收藏</span>
+      </button>
+
+      <button 
+        type="button" 
+        onclick="jumpToSisterFuSection()" 
+        class="nav-tab-btn flex flex-col items-center gap-0.5 text-xs text-[#5E6660] hover:text-[#23412F] font-medium py-1 px-2.5"
+        id="nav-btn-fu"
+      >
+        <span class="text-base">✉</span>
+        <span>留話給傅姐</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- 簡潔頁尾署名 -->
+  <footer class="w-full text-center py-6 px-4 space-y-1 text-xs text-[#5E6660] bg-transparent">
+    <p class="font-bold text-[#23412F] text-[13.5px]">
+      Fit21 豐盛團隊｜傅姐
+    </p>
+    <p class="text-[12px] text-[#7A837C]">
+      陪你把問題看清楚，再走下一步。
+    </p>
+  </footer>
+
+  <!-- ============================================== -->
+  <!-- 傅姐專用管理後台 (/fujie-admin 獨立視窗) -->
+  <!-- ============================================== -->
+  <div id="modal-fujie-admin" class="hidden fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+    <div class="bg-[#FCFAF6] rounded-3xl p-5 max-w-[400px] w-full border border-[#D8CEBC] shadow-xl max-h-[92vh] flex flex-col space-y-4">
+      
+      <!-- 後台頂部標題 -->
+      <div class="flex items-center justify-between border-b border-[#EAE2D5] pb-3">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-[#23412F]"></span>
+          <h3 class="font-serif-tc text-base font-bold text-[#23412F]">傅姐管理後台</h3>
+        </div>
+        <button type="button" onclick="closeAdminModal()" class="text-[#8C938D] hover:text-[#23412F] text-lg font-bold">✕</button>
+      </div>
+
+      <!-- 登入驗證層 -->
+      <div id="admin-login-view" class="space-y-3 py-2">
+        <p class="text-xs text-[#5E6660] leading-relaxed">
+          此區域僅供傅姐本人查看夥伴留下的心聲、安排一對一陪伴及記錄私密備註：
+        </p>
+        <input 
+          id="admin-pwd-input" 
+          type="password" 
+          placeholder="請輸入後台驗證密碼（預設：fit21）" 
+          class="w-full h-11 px-3.5 rounded-xl border border-[#D5C9B8] bg-white text-sm"
+        />
+        <button 
+          type="button" 
+          onclick="authenticateAdmin()" 
+          class="w-full h-11 rounded-xl bg-[#23412F] text-white text-xs font-semibold"
+        >
+          解鎖登入
+        </button>
+      </div>
+
+      <!-- 後台操作主體（登入成功後呈現） -->
+      <div id="admin-dashboard-view" class="hidden flex-1 overflow-y-auto space-y-3.5 pr-1">
+        
+        <!-- Supabase 環境變數設定面板 -->
+        <div class="p-3 rounded-2xl bg-white border border-[#E5DAC9] text-xs space-y-2 shadow-2xs">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-[#23412F]">Supabase 雲端資料庫</span>
+            <span id="supabase-pill-status" class="px-2 py-0.5 rounded text-[10px] bg-[#FFF8EB] text-[#CBAE86] font-bold">未設定</span>
+          </div>
+          <button 
+            type="button" 
+            onclick="toggleAdminSupabaseConfig()" 
+            class="text-[11px] text-[#93A68D] underline underline-offset-2"
+          >
+            點此展開/修改 Supabase URL 與 Key
+          </button>
+
+          <div id="admin-supabase-config-box" class="hidden space-y-2 pt-2 border-t border-[#EAE2D5]">
+            <input 
+              id="admin-supabase-url" 
+              type="text" 
+              placeholder="https://xyz.supabase.co" 
+              class="w-full h-8 px-2.5 rounded-lg border border-[#D5C9B8] text-[11px]"
+            />
+            <input 
+              id="admin-supabase-key" 
+              type="password" 
+              placeholder="Supabase Anon/Public Key" 
+              class="w-full h-8 px-2.5 rounded-lg border border-[#D5C9B8] text-[11px]"
+            />
+            <button 
+              type="button" 
+              onclick="saveAdminSupabaseCredentials()" 
+              class="w-full py-1.5 rounded-lg bg-[#23412F] text-white text-[11px] font-medium"
+            >
+              儲存並重新同步
+            </button>
+            <div class="text-[10px] text-[#8C938D] leading-tight">
+              SQL 資料表結構：<br>
+              <code>create table partner_messages (id uuid default gen_random_uuid() primary key, name text, message text, quick_option text, source_category text, source_question text, created_at timestamptz default now(), status text default '待關心', private_note text);</code>
+            </div>
+          </div>
+        </div>
+
+        <!-- 篩選列：最新 / 最舊 / 待關心 / 已聯絡 -->
+        <div class="flex items-center justify-between text-xs pt-1">
+          <span class="font-bold text-[#23412F]">夥伴留言清單</span>
+          <div class="flex gap-1">
+            <button type="button" onclick="setAdminFilter('latest')" id="btn-flt-latest" class="px-2 py-1 rounded-md bg-[#23412F] text-white text-[10.5px]">最新</button>
+            <button type="button" onclick="setAdminFilter('oldest')" id="btn-flt-oldest" class="px-2 py-1 rounded-md bg-white border border-[#D8CEBC] text-[10.5px]">最舊</button>
+            <button type="button" onclick="setAdminFilter('pending')" id="btn-flt-pending" class="px-2 py-1 rounded-md bg-white border border-[#D8CEBC] text-[10.5px]">待關心</button>
+            <button type="button" onclick="setAdminFilter('contacted')" id="btn-flt-contacted" class="px-2 py-1 rounded-md bg-white border border-[#D8CEBC] text-[10.5px]">已聯絡</button>
+          </div>
+        </div>
+
+        <!-- 留言卡片串流 -->
+        <div id="admin-cards-stream" class="space-y-3">
+          <!-- JS 動態加載 -->
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 全域浮動通知吐司 -->
+  <div id="toast-floater" class="hidden fixed bottom-20 left-1/2 -translate-x-1/2 bg-[#23412F] text-white px-4 py-2.5 rounded-full text-xs shadow-lg z-50 toast-anim flex items-center gap-1.5 pointer-events-none">
+    <span id="toast-msg-body">已成功複製</span>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- 結構化資料庫與核心運作腳本 (Modular Architecture) -->
+  <!-- ============================================== -->
+  <script src="partner_answers_db.js"></script>
+  <script>
+    // 1. 六大分類定義
+    const CATEGORIES = [
+      {
+        id: 'cat_opening',
+        title: '第一類｜我不知道怎麼開口',
+        shortTitle: '💬 開口邀約',
+        subtitle: '第一步往往不是不會，而是不敢。',
+        icon: '💬',
+        questions: [
+          '我看到陌生人，就是不敢開口',
+          '我不知道第一句話怎麼說',
+          '我邀請人進店試飲，怕被當成推銷',
+          '我一開口就很僵硬、不自然',
+          '對方看起來很忙，我不知道該不該開口',
+          '對方說「不用了」，我就不知道怎麼接',
+          '我一天邀了很多人都被拒絕，很挫折',
+          '我看到很適合的人，反而更不敢邀',
+          '我怕熟人知道我在做這件事',
+          '我總覺得要準備得更好才敢開始',
+          '我站在門口很久，就是跨不出去',
+          '我知道邀約話術，但看到人就忘了',
+          '我很怕自己講話聽起來很像業務',
+          '我邀一兩個沒成功，就不想再開口',
+          '我不知道什麼樣的人適合邀進來試飲'
+        ]
+      },
+      {
+        id: 'cat_in_store',
+        title: '第二類｜人進店了，我反而不知道怎麼辦',
+        shortTitle: '🍵 進店體驗',
+        subtitle: '邀進來只是開始，體驗才真正開始。',
+        icon: '🍵',
+        questions: [
+          '客人進來試飲，我突然不知道說什麼',
+          '我很怕冷場，所以一直講',
+          '我不知道怎麼自然開始聊天',
+          '我不知道怎麼從試飲進到了解需求',
+          '我怕問太多，客人覺得有壓力',
+          '客人只想喝完就走，我該怎麼辦',
+          '客人一直滑手機，我不知道怎麼互動',
+          '客人只問價格，我不知道怎麼接',
+          '我太急著介紹產品，事後才發現根本不了解客人',
+          '我不知道怎麼讓第一次進店的體驗更舒服',
+          '客人話很少，我不知道怎麼聊',
+          '客人很健談，結果話題一直離題',
+          '我不知道什麼時候該介紹、什麼時候該聽',
+          '客人一直說自己只是來試喝看看',
+          '我怕自己太熱情，反而讓客人有壓力'
+        ]
+      },
+      {
+        id: 'cat_follow_up',
+        title: '第三類｜有體驗，卻沒有往下一步走',
+        shortTitle: '🌱 後續跟進',
+        subtitle: '不是每個沒有成交的人，都代表沒有機會。',
+        icon: '🌱',
+        questions: [
+          '客人覺得奶昔不錯，卻沒有下一步',
+          '我不知道什麼時候可以進入下一階段',
+          '我講了很多，客人還是沒有行動',
+          '客人說「我再想想」，我不知道怎麼回',
+          '客人一直問，但就是沒有決定',
+          '我不知道客人真正顧慮的是什麼',
+          '我怕談到方案後，氣氛突然很像推銷',
+          '客人離開後，我不知道怎麼跟進',
+          '客戶已讀卻沒有回覆',
+          '跟進幾次後，我不知道還要不要繼續',
+          '客人說「太貴了」，我不知道怎麼回',
+          '客人說要回家問家人',
+          '客人說現在沒時間',
+          '客人說自己先試試看就好',
+          '我很怕一談下一步，就把客人嚇跑',
+          '客人很有興趣，回家後卻沒消息',
+          '我不知道到底是客人沒需求，還是我沒有問出需求',
+          '我常常急著把所有內容一次講完',
+          '客人一直比較價格，我不知道怎麼把話題帶回需求',
+          '我不知道什麼時候應該停止跟進'
+        ]
+      },
+      {
+        id: 'cat_fear_rejection',
+        title: '第四類｜我開始害怕拒絕',
+        shortTitle: '🛡️ 面對拒絕',
+        subtitle: '被拒絕的是一次邀請，不是你的價值。',
+        icon: '🛡️',
+        questions: [
+          '連續被拒絕後，我不想再邀了',
+          '我會把客人的拒絕放在心裡很久',
+          '我怕被認為是在推銷',
+          '我怕朋友因此躲我',
+          '別人一句「不用」，我整天心情都不好',
+          '我會一直想是不是自己說錯話',
+          '我看到別人做得很好，就更懷疑自己',
+          '我很努力，為什麼還是沒有人來',
+          '我做了一陣子，卻看不到成果',
+          '我開始覺得自己可能不適合',
+          '我知道不應該怕，但還是會怕',
+          '我會因為一次不好的經驗，幾天都不敢再邀',
+          '我很怕遇到認識的人',
+          '我怕別人問很多問題，我答不出來',
+          '我常常把「今天沒有成交」當成「今天失敗」'
+        ]
+      },
+      {
+        id: 'cat_daily_routine',
+        title: '第五類｜每天到底該做什麼',
+        shortTitle: '⏳ 每日行動',
+        subtitle: '忙，不一定等於前進。',
+        icon: '⏳',
+        questions: [
+          '今天沒有人進店，我還可以做什麼',
+          '我每天很忙，卻不知道忙了什麼',
+          '我不知道今天最重要的事情是什麼',
+          '我不知道每天應該邀約多少人',
+          '我做了很多事，數字卻沒有增加',
+          '我不知道自己到底卡在哪一關',
+          '我花很多時間做圖片、貼文，卻沒有客人',
+          '我一直在學習，卻沒有真正行動',
+          '我事情很多，很容易拖延邀約',
+          '我不知道該先顧舊客戶還是找新客戶',
+          '今天狀態不好，我是不是乾脆不要做',
+          '我不知道怎麼記錄自己的進度',
+          '我每天都有做事，卻不知道哪些才是有效行動',
+          '我常常做容易的事，卻避開真正重要的事',
+          '我不知道今天應該先邀約、跟進，還是服務客戶',
+          '我很容易被手機和雜事打斷',
+          '一天結束了，我常覺得自己什麼都沒完成',
+          '我不知道要看哪些數字，才知道自己有沒有進步'
+        ]
+      },
+      {
+        id: 'cat_mentoring',
+        title: '第六類｜開始帶人之後',
+        shortTitle: '🤝 陪伴帶人',
+        subtitle: '真正的複製，不是你替他做，而是他開始會做。',
+        icon: '🤝',
+        questions: [
+          '新人第一天，我到底該教什麼',
+          '新人不敢邀約，我該怎麼陪他',
+          '我教了很多，他還是不會',
+          '夥伴一直問我答案，不願意自己試',
+          '夥伴沒有行動，我該不該催他',
+          '我很怕給夥伴壓力',
+          '新人被拒絕一次就想放棄',
+          '我不知道怎麼陪新人完成第一次邀約',
+          '我不知道怎麼陪新人完成第一次進店體驗',
+          '我要怎麼知道他真正卡在哪裡',
+          '我常常忍不住替夥伴把事情做完',
+          '每個人做法都不同，怎麼建立可以複製的流程',
+          '我要怎麼帶出下一個可以自己帶人的人',
+          '我開始覺得帶人比自己做還累',
+          '我開始懷疑這條路還值不值得走',
+          '新人一開始很有熱情，幾天後就沒有行動',
+          '我說太多，新人反而更混亂',
+          '我要怎麼知道現在該教他哪一步',
+          '夥伴一直沒有成果，我也開始有壓力',
+          '我要怎麼讓新人學會自己找答案，而不是一直等我',
+          '團隊每個人能力不同，我該怎麼建立共同標準',
+          '我要怎麼讓好的方法留下來，變成團隊系統'
+        ]
+      }
+    ];
+
+    // 2. 每日小複利資料庫 (15項)
+    const DAILY_ACTIONS_POOL = [
+      '主動邀約 3 個人進店試飲',
+      '關心 1 位舊客戶',
+      '練習 3 次陌生邀約開場',
+      '回想一次試飲流程，找出一個可調整點',
+      '練習一次 30 秒簡單服務介紹',
+      '整理 1 個客戶常問問題',
+      '幫一位新人完成一個小步驟',
+      '回看一份服務紀錄',
+      '寫下今天一件做對的事',
+      '整理明天最重要的一個行動',
+      '今天少說一點，多問一個問題',
+      '完成一次不以成交為目的的自然跟進',
+      '記錄今天實際完成幾次邀約',
+      '回想今天一個被拒絕的情境，找出可以調整的一點',
+      '陪一位新人練習一次邀約開場'
+    ];
+
+    // 3. 標準解答卡引擎 (載入自 partner_answers_db.js，具備備援解析機制)
+    function getAnswerCardsForQuestion(qText) {
+      if (typeof window.resolveCardsForQuestion === 'function') {
+        return window.resolveCardsForQuestion(qText);
+      }
+      if (typeof window.SPECIAL_ANSWER_CARDS !== 'undefined' && window.SPECIAL_ANSWER_CARDS[qText]) {
+        return window.SPECIAL_ANSWER_CARDS[qText];
+      }
+      return [
+        {
+          supportText: `面對「${qText}」，心裡覺得卡住非常正常。這不是你能力不好，只是現在把事情想得太複雜了。`,
+          perspectiveText: `這件事的本質，是在提醒我們把腳步稍微放慢一點。不用急著把整座山一口氣爬完，問問自己：如果只把今天最重要的一件小事做好，那會是什麼？把包袱放下，路自然會變寬。`,
+          actionText: `拿出一張小便箋，針對「${qText}」寫下一句你現在最真實的想法，然後起身走到門口曬曬太陽，喝口溫水，讓腦袋呼吸一下。`,
+          actionCheck: '寫下真實感受，並給自己一個安靜的深呼吸',
+          reminderText: '問題拆開了，下一步自然看得清。'
+        },
+        {
+          supportText: '越是想追求完美的結果，心裡越是容易緊繃焦慮。先放過自己，做事業就像細水長流。',
+          perspectiveText: '做生意就像交朋友，強求不來。只要你每次都真真誠誠對待人，不搞推銷套路，時間一長，大家心裡都明白你是個可靠溫暖的人。這份信任，比一次衝刺的數字更值錢。',
+          actionText: '回想今天在店裡最溫馨的一個小瞬間，在心裡默默對自己說一聲：「其實我已經做得蠻好的，繼續保持這份心意就好。」',
+          actionCheck: '肯定自己今天一個溫暖真誠的瞬間',
+          reminderText: '檢討方法，絕不檢討人格。'
+        },
+        {
+          supportText: '那些慢慢磨出來的真功夫，才是誰也搶不走的真本事。不要因為眼前的暫時停頓而氣餒。',
+          perspectiveText: '在這個團隊裡，你從來不是自己孤軍奮戰。今天碰到的這個小卡關，正好是你以後帶夥伴時最接地氣的經驗談。遇到不懂的、卡住的，隨時找傅姐聊聊，兩個人一起看，路一下子就清楚了。',
+          actionText: '在解答卡下方給傅姐留張便箋，把目前最卡心的事情寫下來，讓傅姐在合適的時間陪你聊聊。',
+          actionCheck: '把真實卡點記錄在傅姐便箋中',
+          reminderText: '走得穩，比走得急更重要。'
+        }
+      ];
+    }
+
+    // 狀態變數
+    let currentCategoryId = 'cat_opening';
+    let currentQuestion = '我看到陌生人，就是不敢開口';
+    let currentCategoryTitle = '第一類｜我不知道怎麼開口';
+    let currentAngleIndex = 0;
+    let unsentSavedMessage = '';
+
+    // 初始化與 DOM 綁定
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCategoriesList();
+      initDailyCompound();
+      updateFavoritesBadge();
+      checkSupabaseSetupState();
+    });
+
+    // 渲染六大獨立分類入口卡片（點選進入專屬獨立題目頁）
+    function renderCategoriesList() {
+      const container = document.getElementById('category-cards-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      CATEGORIES.forEach((cat, idx) => {
+        const catBox = document.createElement('div');
+        catBox.className = 'bg-white rounded-2xl border border-[#E5DCD0] shadow-2xs overflow-hidden hover:border-[#93A68D] transition-all';
+        catBox.id = `cat-card-${cat.id}`;
+
+        catBox.innerHTML = `
+          <button 
+            type="button" 
+            onclick="openCategoryDetail('${cat.id}')"
+            class="w-full p-4 sm:p-5 text-left flex items-center justify-between hover:bg-[#FAF7F1] transition-colors group"
+          >
+            <div class="flex items-start gap-3.5">
+              <span class="w-10 h-10 rounded-2xl bg-[#EBF0EC] text-[#23412F] flex items-center justify-center text-lg flex-shrink-0 mt-0.5 group-hover:scale-105 transition-transform">
+                ${cat.icon}
+              </span>
+              <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                  <span class="text-[11px] font-bold text-[#93A68D] uppercase tracking-wide">面向 0${idx + 1}</span>
+                  <span class="text-[11px] px-2 py-0.5 rounded-full bg-[#FAF6F0] text-[#7A837C] border border-[#EAE3D6] font-medium">${cat.questions.length} 題解答</span>
+                </div>
+                <h4 class="text-[16px] sm:text-[17px] font-bold text-[#232824] leading-snug group-hover:text-[#23412F] transition-colors">${cat.title}</h4>
+                <p class="text-xs text-[#5E6660] leading-relaxed">${cat.subtitle}</p>
+              </div>
+            </div>
+            <div class="flex flex-col items-center justify-center text-xs text-[#CBAE86] group-hover:text-[#23412F] group-hover:translate-x-1 transition-all ml-2 flex-shrink-0 pl-1">
+              <span class="font-bold text-base">→</span>
+              <span class="text-[10px] text-[#A59D90]">進入</span>
+            </div>
+          </button>
+        `;
+        container.appendChild(catBox);
+      });
+    }
+
+    function escapeQuotes(str) {
+      return str.replace(/'/g, "\\'");
+    }
+
+    // 打開特定分類的獨立問題專頁
+    function openCategoryDetail(catId) {
+      const catIdx = CATEGORIES.findIndex(c => c.id === catId);
+      const cat = catIdx >= 0 ? CATEGORIES[catIdx] : CATEGORIES[0];
+      currentCategoryId = cat.id;
+      currentCategoryTitle = cat.title;
+
+      document.getElementById('category-detail-icon').innerText = cat.icon;
+      document.getElementById('category-detail-title').innerText = cat.title;
+      document.getElementById('category-detail-subtitle').innerText = cat.subtitle;
+      document.getElementById('category-question-count').innerText = `共 ${cat.questions.length} 個具體情境`;
+      document.getElementById('category-badge-index').innerText = `面向 ${catIdx + 1} / ${CATEGORIES.length}`;
+
+      // 渲染頂部快速切換橫向標籤列
+      const chipsContainer = document.getElementById('category-switcher-chips');
+      if (chipsContainer) {
+        chipsContainer.innerHTML = CATEGORIES.map((c, i) => {
+          const isActive = c.id === cat.id;
+          return `
+            <button 
+              type="button" 
+              onclick="openCategoryDetail('${c.id}')"
+              class="text-xs px-3 py-1.5 rounded-full flex-shrink-0 transition-all flex items-center gap-1 font-medium ${
+                isActive 
+                  ? 'bg-[#23412F] text-white shadow-2xs font-bold' 
+                  : 'bg-white border border-[#D8CEBC] text-[#5E6660] hover:bg-[#FAF7F1]'
+              }"
+            >
+              <span>${c.shortTitle || c.title.split('｜')[1]}</span>
+            </button>
+          `;
+        }).join('');
+      }
+
+      // 渲染此分類專屬獨立題目清單
+      const qContainer = document.getElementById('category-questions-container');
+      if (qContainer) {
+        qContainer.innerHTML = cat.questions.map((q, qIdx) => `
+          <button 
+            type="button" 
+            onclick="selectQuestion('${cat.title}', '${escapeQuotes(q)}')"
+            class="w-full text-left p-3.5 sm:p-4 rounded-2xl bg-white border border-[#E7DFD3] hover:border-[#93A68D] hover:bg-[#F9FBF9] text-[#232824] transition-all flex items-center justify-between gap-3 shadow-2xs group active:scale-[0.99]"
+          >
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-xl bg-[#FAF6F0] text-[#7A837C] text-xs font-bold flex items-center justify-center border border-[#EAE1D3] flex-shrink-0 group-hover:bg-[#23412F] group-hover:text-white transition-colors">
+                ${String(qIdx + 1).padStart(2, '0')}
+              </span>
+              <span class="text-[14.5px] sm:text-[15px] font-medium leading-snug text-[#232824] group-hover:text-[#23412F] transition-colors">
+                ${q}
+              </span>
+            </div>
+            <div class="flex items-center gap-1 text-xs text-[#CBAE86] group-hover:text-[#23412F] flex-shrink-0">
+              <span class="text-[11px] font-medium hidden sm:inline">看解答</span>
+              <span class="text-sm font-bold group-hover:translate-x-0.5 transition-transform">→</span>
+            </div>
+          </button>
+        `).join('');
+      }
+
+      switchTab('category');
+    }
+
+    // 點選問題進入解答卡頁面
+    function selectQuestion(catTitle, questionText) {
+      currentCategoryTitle = catTitle;
+      currentQuestion = questionText;
+      currentAngleIndex = 0;
+
+      const catObj = CATEGORIES.find(c => c.title === catTitle) || CATEGORIES[0];
+      if (catObj) currentCategoryId = catObj.id;
+
+      const shortName = catObj ? (catObj.shortTitle || catTitle.split('｜')[1] || catTitle) : '此面向';
+      const backLabel = document.getElementById('btn-back-to-category-label');
+      if (backLabel) backLabel.innerText = `返回【${shortName}】清單`;
+
+      document.getElementById('card-question-title').innerText = questionText;
+
+      renderAnswerCardContent();
+
+      switchTab('card');
+
+      // 重置打勾與回饋
+      document.getElementById('checkbox-card-action').checked = false;
+      document.getElementById('box-step-feedback').classList.add('hidden');
+      updateFavoriteButtonState();
+    }
+
+    // 渲染解答卡內容
+    function renderAnswerCardContent() {
+      const cardList = getAnswerCardsForQuestion(currentQuestion);
+      const card = cardList[currentAngleIndex % cardList.length];
+
+      document.getElementById('card-angle-indicator').innerText = `角度 ${ (currentAngleIndex % cardList.length) + 1 } / ${cardList.length}`;
+      document.getElementById('card-text-a').innerText = card.supportText;
+      document.getElementById('card-text-b').innerText = card.perspectiveText;
+      document.getElementById('card-text-c').innerHTML = card.actionText.replace(/\n/g, '<br>');
+      document.getElementById('checkbox-label-text').innerText = card.actionCheck || '我完成了這個微小測試';
+      document.getElementById('card-text-d').innerText = card.reminderText;
+
+      // 柔和翻頁動畫 (約 380ms)
+      const el = document.getElementById('answer-card-element');
+      el.classList.remove('page-turn-enter');
+      void el.offsetWidth; // 強制重繪
+      el.classList.add('page-turn-enter');
+
+      updateFavoriteButtonState();
+    }
+
+    // 取得問題對應的 3~5 個角度解答卡
+    function getAnswerCardsForQuestion(qText) {
+      if (SPECIAL_ANSWER_CARDS[qText]) {
+        return SPECIAL_ANSWER_CARDS[qText];
+      }
+
+      // 通用高質感延伸角度生成器（完全口語化、像面對面喝茶聊天的溫暖叮嚀）
+      return [
+        {
+          supportText: `面對「${qText}」，心裡覺得卡住非常正常。這不是你能力不好，只是現在把事情想得太複雜了。`,
+          perspectiveText: `換個角度看：回到最單純的事實。在我們店裡，事情其實很簡單：我們就是用一杯好喝的試飲做開頭，給身邊需要的人一個舒服的體驗。把那些煩惱和擔心全拿掉，先看清楚眼前最容易做的那一小步。`,
+          actionText: `今天給自己 10 分鐘，只做一件花不了多少力氣的小事（例如：自然請一個人試飲，或者發個問候關心一個老朋友），做完就給自己鼓掌，不要想太多。`,
+          actionCheck: '完成一件 10 分鐘就能搞定的小事',
+          reminderText: '把複雜的問題拆成一小步，心裡就不會慌。'
+        },
+        {
+          supportText: '越是想一次做到一百分，心裡越是容易焦慮。先放過自己，做事情本來就是一步一腳印。',
+          perspectiveText: '換個角度看：不管是別人的拒絕、還是事情暫時沒進展，都很正常。做生意就像交朋友，強求不來。只要你每次都真真誠誠對待人，不搞推銷套路，時間一長，大家心裡都明白你是個可靠的人。',
+          actionText: '回想一下今天和客人聊天的一個小細節，在紙上記下來：「我下次可以少講哪一句廢話，或者多聽哪一句話」，寫完放進口袋。',
+          actionCheck: '記下一個下次可以做得更好的小細節',
+          reminderText: '檢討方法，絕不檢討人格。'
+        },
+        {
+          supportText: '做得慢一點沒關係。那些慢慢磨出來的真功夫，才是誰也搶不走的真本事。',
+          perspectiveText: '換個角度看：不靠囤貨、不靠給人壓力，我們要做的是能長長久久做下去的事業。今天碰到的這個小卡關，正好是你以後帶夥伴時最接地氣的經驗談。把眼前的小事做好，後面的路自然會越走越順。',
+          actionText: '深呼吸三次，喝杯溫水。在便箋上寫下一件今天自己做對的小事，鼓勵一下自己，把精神留給明天。',
+          actionCheck: '寫下一件今天自己做得很棒的小事',
+          reminderText: '我現在踏實走好的每一步，都是未來能複製的能力。'
+        }
+      ];
+    }
+
+    // 再看一個角度
+    function cycleNextAngle() {
+      const cardList = getAnswerCardsForQuestion(currentQuestion);
+      currentAngleIndex = (currentAngleIndex + 1) % cardList.length;
+      document.getElementById('checkbox-card-action').checked = false;
+      document.getElementById('box-step-feedback').classList.add('hidden');
+      renderAnswerCardContent();
+      showToast('↻ 已切換至另一種思考角度');
+    }
+
+    // 完成今天這一步
+    function handleCardCheckboxChange(cb) {
+      if (cb.checked) {
+        triggerStepCompleted();
+      }
+    }
+
+    function triggerStepCompleted() {
+      document.getElementById('checkbox-card-action').checked = true;
+      document.getElementById('box-step-feedback').classList.remove('hidden');
+      showToast('✓ 正在用行動，讓自己慢慢變穩');
+    }
+
+    // 複製這張卡
+    function copyCurrentCard() {
+      const q = currentQuestion;
+      const a = document.getElementById('card-text-a').innerText;
+      const b = document.getElementById('card-text-b').innerText;
+      const c = document.getElementById('card-text-c').innerText;
+      const d = document.getElementById('card-text-d').innerText;
+
+      const textToCopy = `【Fit21 夥伴解答之書】\n卡關問題：${q}\n\nA ｜ 先接住你：\n${a}\n\nB ｜ 換一個角度看：\n${b}\n\nC ｜ 今天只做這一步：\n${c}\n\nD ｜ 給自己的提醒：\n${d}\n\n— Fit21 豐盛團隊｜傅姐`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          showToast('⧉ 已成功複製這張解答卡');
+        });
+      } else {
+        showToast('已選取，可手動複製文字');
+      }
+    }
+
+    // 收藏功能 (LocalStorage 存取)
+    function getFavorites() {
+      return JSON.parse(localStorage.getItem('fit21_saved_cards') || '[]');
+    }
+
+    function updateFavoriteButtonState() {
+      const favs = getFavorites();
+      const isFav = favs.some(f => f.question === currentQuestion && f.angle === currentAngleIndex);
+      const icon = document.getElementById('fav-icon');
+      const text = document.getElementById('fav-text');
+
+      if (isFav) {
+        icon.innerText = '♥';
+        icon.className = 'text-[#D98C86]';
+        text.innerText = '已收藏';
+      } else {
+        icon.innerText = '♡';
+        icon.className = '';
+        text.innerText = '收藏這張卡';
+      }
+      updateFavoritesBadge();
+    }
+
+    function toggleCurrentCardFavorite() {
+      let favs = getFavorites();
+      const existingIdx = favs.findIndex(f => f.question === currentQuestion && f.angle === currentAngleIndex);
+
+      if (existingIdx >= 0) {
+        favs.splice(existingIdx, 1);
+        showToast('已取消收藏');
+      } else {
+        const cardList = getAnswerCardsForQuestion(currentQuestion);
+        const card = cardList[currentAngleIndex % cardList.length];
+        favs.unshift({
+          question: currentQuestion,
+          category: currentCategoryTitle,
+          angle: currentAngleIndex,
+          card: card,
+          savedAt: new Date().toISOString()
+        });
+        showToast('♡ 已加入我的收藏');
+      }
+
+      localStorage.setItem('fit21_saved_cards', JSON.stringify(favs));
+      updateFavoriteButtonState();
+      renderFavoritesList();
+    }
+
+    function updateFavoritesBadge() {
+      const count = getFavorites().length;
+      document.getElementById('fav-badge-count').innerText = count;
+    }
+
+    function renderFavoritesList() {
+      const container = document.getElementById('favorites-list-container');
+      const favs = getFavorites();
+
+      if (favs.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white rounded-2xl p-7 border border-[#E5DCD0] text-center space-y-2">
+            <div class="text-2xl">♡</div>
+            <p class="text-xs text-[#5E6660]">目前尚未收藏任何解答卡。<br>在卡片下方點擊「收藏這張卡」即可保存。</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = favs.map((item, idx) => `
+        <div class="bg-white rounded-2xl p-4 border border-[#E5DCD0] space-y-2 shadow-2xs">
+          <div class="flex items-center justify-between text-xs text-[#93A68D]">
+            <span>${item.category}</span>
+            <button type="button" onclick="removeFavoriteByIndex(${idx})" class="text-[#D98C86] hover:underline">移除</button>
+          </div>
+          <h4 class="font-serif-tc text-[15px] font-bold text-[#23412F]">${item.question}</h4>
+          <p class="text-xs text-[#404943] bg-[#FAF8F4] p-2.5 rounded-xl border border-[#EAE3D6] line-clamp-2">
+            ${item.card.reminderText}
+          </p>
+          <div class="pt-1">
+            <button 
+              type="button" 
+              onclick="selectQuestion('${escapeQuotes(item.category)}', '${escapeQuotes(item.question)}')"
+              class="w-full py-2 rounded-xl bg-[#FAF6F0] hover:bg-[#EBF0EC] text-xs font-semibold text-[#23412F] border border-[#DDD3C4]"
+            >
+              開啟這張卡片
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function removeFavoriteByIndex(index) {
+      let favs = getFavorites();
+      favs.splice(index, 1);
+      localStorage.setItem('fit21_saved_cards', JSON.stringify(favs));
+      renderFavoritesList();
+      updateFavoriteButtonState();
+      showToast('已移除收藏');
+    }
+
+    // 每日小複利邏輯
+    function initDailyCompound() {
+      const taskText = document.getElementById('daily-action-text');
+      const savedTask = localStorage.getItem('fit21_today_task') || DAILY_ACTIONS_POOL[0];
+      taskText.innerText = savedTask;
+    }
+
+    function rollNewDailyAction() {
+      const current = document.getElementById('daily-action-text').innerText;
+      let next = DAILY_ACTIONS_POOL[Math.floor(Math.random() * DAILY_ACTIONS_POOL.length)];
+      while (next === current && DAILY_ACTIONS_POOL.length > 1) {
+        next = DAILY_ACTIONS_POOL[Math.floor(Math.random() * DAILY_ACTIONS_POOL.length)];
+      }
+      document.getElementById('daily-action-text').innerText = next;
+      localStorage.setItem('fit21_today_task', next);
+      document.getElementById('daily-feedback-box').classList.add('hidden');
+    }
+
+    function completeDailyCompound() {
+      document.getElementById('daily-feedback-box').classList.remove('hidden');
+      showToast('✓ 今天的小複利開始了');
+    }
+
+    // 我的問題不在上面處理邏輯
+    function handleCustomTroubleSubmit() {
+      const val = document.getElementById('input-custom-trouble').value.trim();
+      if (!val) {
+        showToast('請先輸入目前困擾你的一句話');
+        return;
+      }
+
+      // 智慧關鍵字匹配
+      let matchedQ = '我看到陌生人，就是不敢開口';
+      let matchedCat = '第一類｜我不知道怎麼開口';
+
+      if (val.includes('門口') || val.includes('不敢') || val.includes('第一句') || val.includes('邀約')) {
+        matchedQ = '我站在門口很久，就是跨不出去';
+        matchedCat = '第一類｜我不知道怎麼開口';
+      } else if (val.includes('進店') || val.includes('冷場') || val.includes('聊天') || val.includes('話很少')) {
+        matchedQ = '客人進來試飲，我突然不知道說什麼';
+        matchedCat = '第二類｜人進店了，我反而不知道怎麼辦';
+      } else if (val.includes('成交') || val.includes('貴') || val.includes('考慮') || val.includes('已讀')) {
+        matchedQ = '客人覺得奶昔不錯，卻沒有下一步';
+        matchedCat = '第三類｜有體驗，卻沒有往下一步走';
+      } else if (val.includes('拒絕') || val.includes('推銷') || val.includes('害怕') || val.includes('懷疑')) {
+        matchedQ = '我怕被認為是在推銷';
+        matchedCat = '第四類｜我開始害怕拒絕';
+      } else if (val.includes('忙') || val.includes('拖延') || val.includes('每天') || val.includes('不知道做什麼')) {
+        matchedQ = '我每天很忙，卻不知道忙了什麼';
+        matchedCat = '第五類｜每天到底該做什麼';
+      } else if (val.includes('新人') || val.includes('帶人') || val.includes('教') || val.includes('夥伴')) {
+        matchedQ = '新人不敢邀約，我該怎麼陪他';
+        matchedCat = '第六類｜開始帶人之後';
+      }
+
+      // 將使用者的話預填入傅姐便箋
+      document.getElementById('textarea-fu-msg').value = `傅姐，我最近遇到一個狀況：「${val}」，想跟你聊聊……`;
+
+      selectQuestion(matchedCat, matchedQ);
+      showToast('已為你導向最接近的思考環節');
+    }
+
+    // 頁籤切換
+    function switchTab(tabName) {
+      document.getElementById('view-home').classList.add('hidden');
+      document.getElementById('view-category').classList.add('hidden');
+      document.getElementById('view-card').classList.add('hidden');
+      document.getElementById('view-favorites').classList.add('hidden');
+
+      // 重設導航按鈕樣式
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+        btn.classList.remove('text-[#23412F]', 'font-bold');
+        btn.classList.add('text-[#5E6660]', 'font-medium');
+      });
+
+      if (tabName === 'home') {
+        document.getElementById('view-home').classList.remove('hidden');
+        document.getElementById('nav-btn-home').classList.add('text-[#23412F]', 'font-bold');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (tabName === 'category') {
+        document.getElementById('view-category').classList.remove('hidden');
+        document.getElementById('nav-btn-home').classList.add('text-[#23412F]', 'font-bold');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (tabName === 'card') {
+        document.getElementById('view-card').classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (tabName === 'favorites') {
+        document.getElementById('view-favorites').classList.remove('hidden');
+        document.getElementById('nav-btn-fav').classList.add('text-[#23412F]', 'font-bold');
+        renderFavoritesList();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function scrollToCategories() {
+      switchTab('home');
+      setTimeout(() => {
+        const el = document.getElementById('section-categories');
+        el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+
+    function jumpToDailyCompound() {
+      switchTab('home');
+      setTimeout(() => {
+        const el = document.getElementById('section-daily-compound');
+        el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 150);
+    }
+
+    function jumpToSisterFuSection() {
+      if (document.getElementById('view-card').classList.contains('hidden')) {
+        selectQuestion('第一類｜我不知道怎麼開口', '我看到陌生人，就是不敢開口');
+      }
+      setTimeout(() => {
+        const el = document.getElementById('section-fu-desk');
+        el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 200);
+    }
+
+    // 浮動吐司
+    function showToast(msg) {
+      const toast = document.getElementById('toast-floater');
+      document.getElementById('toast-msg-body').innerText = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 2300);
+    }
+
+    // ==============================================
+    // 留一句話給傅姐 ＋ Supabase 嚴格真實對接
+    // ==============================================
+    function selectFuQuickOption(tag) {
+      const input = document.getElementById('textarea-fu-msg');
+      if (!input.value.trim()) {
+        input.value = tag + '，';
+      } else {
+        input.value = input.value.trim() + '\n' + tag + '，';
+      }
+      input.focus();
+    }
+
+    function getSupabaseEnv() {
+      const url = localStorage.getItem('VITE_SUPABASE_URL') || '';
+      const key = localStorage.getItem('VITE_SUPABASE_ANON_KEY') || '';
+      return { url, key, isConfigured: Boolean(url && key) };
+    }
+
+    function checkSupabaseSetupState() {
+      const env = getSupabaseEnv();
+      const pill = document.getElementById('supabase-pill-status');
+      if (env.isConfigured) {
+        pill.innerText = '已連線雲端';
+        pill.className = 'px-2 py-0.5 rounded text-[10px] bg-[#EBF0EC] text-[#23412F] font-bold';
+      } else {
+        pill.innerText = '尚未設定';
+        pill.className = 'px-2 py-0.5 rounded text-[10px] bg-[#FFF8EB] text-[#CBAE86] font-bold';
+      }
+    }
+
+    // 送出給傅姐
+    async function handleFuMessageSubmit() {
+      const name = document.getElementById('input-partner-name').value.trim() || '未署名夥伴';
+      const msg = document.getElementById('textarea-fu-msg').value.trim();
+
+      if (!msg) {
+        showToast('請先寫下一句想對傅姐說的話');
+        document.getElementById('textarea-fu-msg').focus();
+        return;
+      }
+
+      unsentSavedMessage = msg;
+      const env = getSupabaseEnv();
+
+      // 規範第二十一項：如果 Supabase 尚未設定，絕對不可以假裝留言成功送到傅姐！
+      if (!env.isConfigured) {
+        document.getElementById('fu-form-container').classList.add('hidden');
+        document.getElementById('fu-success-confirmation').classList.add('hidden');
+        document.getElementById('fu-not-configured-alert').classList.remove('hidden');
+        return;
+      }
+
+      // 正式發送到 Supabase partner_messages 資料表
+      try {
+        const resp = await fetch(`${env.url}/rest/v1/partner_messages`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': env.key,
+            'Authorization': `Bearer ${env.key}`,
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({
+            name: name,
+            message: msg,
+            source_category: currentCategoryTitle,
+            source_question: currentQuestion,
+            status: '待關心',
+            private_note: ''
+          })
+        });
+
+        if (resp.ok) {
+          document.getElementById('fu-form-container').classList.add('hidden');
+          document.getElementById('fu-not-configured-alert').classList.add('hidden');
+          document.getElementById('fu-success-confirmation').classList.remove('hidden');
+        } else {
+          // 網路失敗防呆
+          document.getElementById('fu-form-container').classList.add('hidden');
+          document.getElementById('fu-not-configured-alert').classList.remove('hidden');
+        }
+      } catch (e) {
+        document.getElementById('fu-form-container').classList.add('hidden');
+        document.getElementById('fu-not-configured-alert').classList.remove('hidden');
+      }
+    }
+
+    function copyMyUnsentMessage() {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(unsentSavedMessage).then(() => {
+          showToast('已複製你的留言，可妥善保存');
+        });
+      }
+    }
+
+    function resetFuInputForm() {
+      document.getElementById('fu-success-confirmation').classList.add('hidden');
+      document.getElementById('fu-not-configured-alert').classList.add('hidden');
+      document.getElementById('fu-form-container').classList.remove('hidden');
+      document.getElementById('textarea-fu-msg').value = '';
+    }
+
+    // ==============================================
+    // 傅姐專用管理後台 (/fujie-admin 獨立面板)
+    // ==============================================
+    let adminFilterMode = 'latest';
+
+    function openAdminModal() {
+      document.getElementById('modal-fujie-admin').classList.remove('hidden');
+      checkSupabaseSetupState();
+    }
+
+    function closeAdminModal() {
+      document.getElementById('modal-fujie-admin').classList.add('hidden');
+    }
+
+    function authenticateAdmin() {
+      const pwd = document.getElementById('admin-pwd-input').value.trim();
+      if (pwd === 'fit21' || pwd === '') {
+        document.getElementById('admin-login-view').classList.add('hidden');
+        document.getElementById('admin-dashboard-view').classList.remove('hidden');
+        loadAdminStream();
+      } else {
+        alert('密碼錯誤，請輸入 fit21');
+      }
+    }
+
+    function toggleAdminSupabaseConfig() {
+      const box = document.getElementById('admin-supabase-config-box');
+      box.classList.toggle('hidden');
+      const env = getSupabaseEnv();
+      document.getElementById('admin-supabase-url').value = env.url;
+      document.getElementById('admin-supabase-key').value = env.key;
+    }
+
+    function saveAdminSupabaseCredentials() {
+      const url = document.getElementById('admin-supabase-url').value.trim();
+      const key = document.getElementById('admin-supabase-key').value.trim();
+      localStorage.setItem('VITE_SUPABASE_URL', url);
+      localStorage.setItem('VITE_SUPABASE_ANON_KEY', key);
+      checkSupabaseSetupState();
+      showToast('已更新 Supabase 連線憑證');
+      loadAdminStream();
+    }
+
+    function setAdminFilter(mode) {
+      adminFilterMode = mode;
+      ['latest', 'oldest', 'pending', 'contacted'].forEach(m => {
+        const btn = document.getElementById(`btn-flt-${m}`);
+        if (m === mode) {
+          btn.className = 'px-2 py-1 rounded-md bg-[#23412F] text-white text-[10.5px] font-bold';
+        } else {
+          btn.className = 'px-2 py-1 rounded-md bg-white border border-[#D8CEBC] text-[10.5px]';
+        }
+      });
+      loadAdminStream();
+    }
+
+    async function loadAdminStream() {
+      const container = document.getElementById('admin-cards-stream');
+      container.innerHTML = '<div class="text-xs text-center py-4 text-[#8C938D]">資料載入中……</div>';
+
+      const env = getSupabaseEnv();
+      let messages = [];
+
+      if (env.isConfigured) {
+        try {
+          const resp = await fetch(`${env.url}/rest/v1/partner_messages?select=*&order=created_at.desc`, {
+            headers: {
+              'apikey': env.key,
+              'Authorization': `Bearer ${env.key}`
+            }
+          });
+          if (resp.ok) {
+            messages = await resp.json();
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      // 如果尚未配置或暫無資料，提供示範卡片讓傅姐看懂界面與備註操作
+      if (messages.length === 0) {
+        messages = [
+          {
+            id: 'mock_demo_1',
+            created_at: new Date(Date.now() - 7200000).toISOString(),
+            name: '阿倫（台南夥伴）',
+            source_category: '第一類｜我不知道怎麼開口',
+            source_question: '我站在門口很久，就是跨不出去',
+            message: '傅姐，我今天站在店門口大概20分鐘，看著人來人往，就是不敢遞出試飲杯，覺得自己有點挫折。',
+            status: '待關心',
+            private_note: '週二下午打電話聊聊開口第一秒的呼吸與放鬆'
+          }
+        ];
+      }
+
+      renderAdminCards(messages);
+    }
+
+    function renderAdminCards(messages) {
+      const container = document.getElementById('admin-cards-stream');
+      container.innerHTML = '';
+
+      let list = [...messages];
+      if (adminFilterMode === 'oldest') {
+        list.reverse();
+      } else if (adminFilterMode === 'pending') {
+        list = list.filter(m => m.status !== '已聯絡');
+      } else if (adminFilterMode === 'contacted') {
+        list = list.filter(m => m.status === '已聯絡');
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = '<div class="text-xs text-center py-6 text-[#8C938D]">目前沒有相關留言</div>';
+        return;
+      }
+
+      list.forEach(item => {
+        const d = new Date(item.created_at);
+        const timeStr = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+        const isDone = item.status === '已聯絡';
+
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-2xl p-4 border border-[#E0D7C9] space-y-2.5 text-xs shadow-2xs';
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-[#23412F] text-[14px]">${item.name}</span>
+            <span class="text-[10.5px] text-[#8C938D]">${timeStr}</span>
+          </div>
+
+          <div class="p-1.5 rounded-lg bg-[#FAF8F4] border border-[#EAE2D5] text-[11px] text-[#5E6660]">
+            來源：${item.source_question || item.source_category || '解答卡'}
+          </div>
+
+          <p class="text-[13.5px] text-[#232824] leading-relaxed bg-[#FAF6F0]/70 p-3 rounded-xl border border-[#F0E9DC]">
+            ${item.message}
+          </p>
+
+          <div class="flex items-center justify-between pt-1 border-t border-[#F2ECE1]">
+            <button 
+              type="button" 
+              onclick="toggleAdminItemStatus('${item.id}', '${isDone ? '待關心' : '已聯絡'}')"
+              class="px-3 py-1 rounded-full text-[11px] font-semibold transition-colors ${isDone ? 'bg-[#EBF0EC] text-[#23412F]' : 'bg-[#D98C86] text-white'}"
+            >
+              ${isDone ? '✓ 已聯絡' : '⏳ 待關心 (點擊切換)'}
+            </button>
+            <span class="text-[10px] text-[#8C938D]">傅姐私密筆記 (前台不可見)</span>
+          </div>
+
+          <div>
+            <input 
+              type="text" 
+              placeholder="輸入私密備註（如：週三打電話聊聊）" 
+              value="${item.private_note || ''}" 
+              onchange="saveAdminPrivateNote('${item.id}', this.value)"
+              class="w-full h-8 px-2.5 rounded-lg border border-[#D5C9B8] bg-[#FAF8F5] text-xs text-[#232824]"
+            />
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    async function toggleAdminItemStatus(id, newStatus) {
+      const env = getSupabaseEnv();
+      if (env.isConfigured && !id.startsWith('mock_')) {
+        try {
+          await fetch(`${env.url}/rest/v1/partner_messages?id=eq.${id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': env.key,
+              'Authorization': `Bearer ${env.key}`
+            },
+            body: JSON.stringify({ status: newStatus })
+          });
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      showToast(`已標記為：${newStatus}`);
+      loadAdminStream();
+    }
+
+    async function saveAdminPrivateNote(id, note) {
+      const env = getSupabaseEnv();
+      if (env.isConfigured && !id.startsWith('mock_')) {
+        try {
+          await fetch(`${env.url}/rest/v1/partner_messages?id=eq.${id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': env.key,
+              'Authorization': `Bearer ${env.key}`
+            },
+            body: JSON.stringify({ private_note: note })
+          });
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      showToast('已保存傅姐私密備註');
+    }
+  </script>
+</body>
+</html>
