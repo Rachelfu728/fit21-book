@@ -381,27 +381,6 @@
           </span>
         </div>
 
-        <!-- 🎧 聽傅姐說 (語音朗讀專區) -->
-        <div class="p-3 rounded-2xl bg-gradient-to-r from-[#FAF5EC] to-[#F3EDE0] border border-[#E2D5C1] flex items-center justify-between shadow-2xs">
-          <div class="flex items-center gap-2.5 min-w-0">
-            <span class="w-8 h-8 rounded-full bg-[#23412F] text-white flex items-center justify-center text-sm shadow-xs flex-shrink-0">
-              🎧
-            </span>
-            <div class="min-w-0">
-              <div class="text-xs font-bold text-[#23412F]">不想看字？聽傅姐跟你說</div>
-              <div class="text-[10.5px] text-[#7A837C] truncate">約 15 秒親切語音，放鬆聽心法</div>
-            </div>
-          </div>
-          <button 
-            type="button" 
-            id="btn-speak-fu" 
-            onclick="toggleSpeakFuCard()" 
-            class="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-[#23412F] hover:bg-[#182E21] text-white text-xs font-medium transition-transform active:scale-95 shadow-2xs flex items-center gap-1.5"
-          >
-            <span id="btn-speak-icon">▶</span>
-            <span id="btn-speak-label">聽傅姐說</span>
-          </button>
-        </div>
 
         <!-- A ｜ 先接住你 -->
         <div class="space-y-1.5">
@@ -1330,14 +1309,6 @@
       el.classList.remove('page-turn-enter');
       void el.offsetWidth; // 強制重繪
       el.classList.add('page-turn-enter');
-
-      // 重設語音朗讀狀態
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
-      isSpeaking = false;
-      updateSpeakBtnState(false);
-
       updateFavoriteButtonState();
     }
 
@@ -1576,101 +1547,8 @@
       showToast('已為你導向最接近的思考環節');
     }
 
-    // ==============================================
-    // 🎧 聽傅姐說 (手機語音朗讀專區)
-    // ==============================================
-    let isSpeaking = false;
-
-    function toggleSpeakFuCard() {
-      if (!('speechSynthesis' in window)) {
-        showToast('抱歉，此手機瀏覽器暫不支援語音朗讀');
-        return;
-      }
-
-      if (isSpeaking) {
-        window.speechSynthesis.cancel();
-        isSpeaking = false;
-        updateSpeakBtnState(false);
-        return;
-      }
-
-      window.speechSynthesis.cancel();
-
-      const q = currentQuestion || '這個狀況';
-      const cardList = getAnswerCardsForQuestion(q);
-      const card = cardList[currentAngleIndex % cardList.length];
-
-      // 提取核心口語內容（去掉標籤與括號，濃縮成15~20秒親切口吻）
-      const cleanPerspective = (card.perspectiveText || '')
-        .replace(/換個角度看：/g, '')
-        .replace(/在我們店裡/g, '在店裡')
-        .replace(/<[^>]*>/g, '');
-      const cleanAction = (card.actionText || '')
-        .replace(/<[^>]*>/g, '')
-        .replace(/「/g, '')
-        .replace(/」/g, '')
-        .replace(/\n/g, '，');
-      const cleanReminder = (card.reminderText || '')
-        .replace(/“/g, '')
-        .replace(/”/g, '');
-
-      const speechText = `夥伴你好，我是傅姐。遇到${q}，別給自己太大壓力。${cleanPerspective}。今天你只要做這一步：${cleanAction}。記得這句話：${cleanReminder}。慢慢來，我們一步一步走！`;
-
-      const utter = new SpeechSynthesisUtterance(speechText);
-      utter.lang = 'zh-TW';
-      utter.rate = 0.92; // 溫暖親切的長輩導師語速
-      utter.pitch = 1.05; // 柔和女聲聲調
-
-      // 優先挑選台灣繁體中文自然女聲
-      const voices = window.speechSynthesis.getVoices();
-      const twVoice = voices.find(v => v.lang === 'zh-TW' || v.lang === 'cmn-Hant-TW' || v.name.includes('Taiwan') || v.name.includes('Mei-Jia') || v.name.includes('Yating') || v.name.includes('HanHan') || v.name.includes('HsiaoChen') || v.name.includes('Chinese (Taiwan)'));
-      if (twVoice) {
-        utter.voice = twVoice;
-      }
-
-      utter.onstart = () => {
-        isSpeaking = true;
-        updateSpeakBtnState(true);
-      };
-
-      utter.onend = () => {
-        isSpeaking = false;
-        updateSpeakBtnState(false);
-      };
-
-      utter.onerror = () => {
-        isSpeaking = false;
-        updateSpeakBtnState(false);
-      };
-
-      window.speechSynthesis.speak(utter);
-    }
-
-    function updateSpeakBtnState(speaking) {
-      const icon = document.getElementById('btn-speak-icon');
-      const label = document.getElementById('btn-speak-label');
-      const btn = document.getElementById('btn-speak-fu');
-      if (!icon || !label || !btn) return;
-
-      if (speaking) {
-        icon.innerText = '⏹';
-        label.innerText = '停止';
-        btn.className = 'flex-shrink-0 px-3 py-1.5 rounded-full bg-[#D98C86] hover:bg-[#C87A74] text-white text-xs font-bold transition-transform active:scale-95 shadow-2xs flex items-center gap-1.5 animate-pulse';
-      } else {
-        icon.innerText = '▶';
-        label.innerText = '聽傅姐說';
-        btn.className = 'flex-shrink-0 px-3.5 py-1.5 rounded-full bg-[#23412F] hover:bg-[#182E21] text-white text-xs font-medium transition-transform active:scale-95 shadow-2xs flex items-center gap-1.5';
-      }
-    }
-
     // 頁籤切換
     function switchTab(tabName) {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
-      isSpeaking = false;
-      updateSpeakBtnState(false);
-
       document.getElementById('view-home').classList.add('hidden');
       document.getElementById('view-category').classList.add('hidden');
       document.getElementById('view-card').classList.add('hidden');
