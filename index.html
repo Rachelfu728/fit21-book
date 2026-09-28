@@ -1629,8 +1629,11 @@
     }
 
     function getSupabaseEnv() {
-      const url = localStorage.getItem('VITE_SUPABASE_URL') || '';
-      const key = localStorage.getItem('VITE_SUPABASE_ANON_KEY') || '';
+      const defaultUrl = 'https://lgyikafbjxtodwqwnwci.supabase.co';
+      const defaultKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxneWlrYWZianh0b2R3cXdud2NpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1NjYyNjcsImV4cCI6MjEwNjE0MjI2N30.nkH7TrIf4UhY8gf5HVMiNyYE3KayUIDPpXh7NE7I60Q';
+
+      const url = localStorage.getItem('VITE_SUPABASE_URL') || defaultUrl;
+      const key = localStorage.getItem('VITE_SUPABASE_ANON_KEY') || defaultKey;
       return { url, key, isConfigured: Boolean(url && key) };
     }
 
@@ -1689,6 +1692,8 @@
         });
 
         if (resp.ok) {
+          localStorage.setItem('fit21_my_name', name);
+          document.getElementById('textarea-fu-msg').value = '';
           document.getElementById('fu-form-container').classList.add('hidden');
           document.getElementById('fu-not-configured-alert').classList.add('hidden');
           document.getElementById('fu-success-confirmation').classList.remove('hidden');
