@@ -1,0 +1,16 @@
+{
+  "name": "Fit21 夥伴解答之書",
+  "short_name": "解答之書",
+  "description": "卡住的時候，先找到今天的下一步。鼓勵 × 思考 × 行動 × 陪伴",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FAF6F0",
+  "theme_color": "#23412F",
+  "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

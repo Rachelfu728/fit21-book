@@ -4,9 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Fit21 夥伴解答之書｜卡住的時候，先找到今天的下一步</title>
+  <!-- 手機主畫面高質感 App 圖示（消除 G 字，改為燙金綠皮解答之書） -->
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="apple-touch-icon.png">
+  <link rel="shortcut icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="解答之書">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#23412F">
+
   <meta property="og:title" content="Fit21 夥伴解答之書">
   <meta property="og:description" content="卡住的時候，先找到今天的下一步。陪伴每一位夥伴走出卡點！">
-  <meta property="og:image" content="https://rachelfu728.github.io/fit21-book/fu_jie_cozy_watercolor_1790564698305.jpg">
+  <meta property="og:image" content="https://rachelfu728.github.io/fit21-book/apple-touch-icon.png">
   <meta property="og:type" content="website">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>if(!window.tailwind){document.write('<script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"><\/script>')}</script>
@@ -533,110 +544,185 @@
               </div>
             </div>
 
-            <!-- 便箋留言表單（絕不設計成客服聊天室或連續對話泡泡） -->
-            <div id="fu-form-container" class="space-y-3">
-              
-              <!-- 名字或暱稱 -->
-              <div>
-                <label class="block text-xs font-bold text-[#23412F] mb-1">你的名字或暱稱：</label>
-                <input 
-                  id="input-partner-name" 
-                  type="text" 
-                  placeholder="讓傅姐知道是你" 
-                  class="w-full h-11 px-3.5 rounded-xl border border-[#D5C9B8] bg-white text-[15px] text-[#232824] placeholder-[#A59D90] focus:outline-none focus:border-[#23412F]"
-                />
-              </div>
-
-              <!-- 快速選項 -->
-              <div>
-                <div class="text-xs text-[#5E6660] font-medium mb-1.5">快速點選心情：</div>
-                <div class="flex flex-wrap gap-1.5">
-                  <button type="button" onclick="selectFuQuickOption('我有點卡住了')" class="text-xs px-3 py-1.5 rounded-full bg-white border border-[#D8CEBC] text-[#404943] hover:bg-[#EBF0EC] transition-colors">
-                    🌱 我有點卡住了
-                  </button>
-                  <button type="button" onclick="selectFuQuickOption('我想把事情做得更好')" class="text-xs px-3 py-1.5 rounded-full bg-white border border-[#D8CEBC] text-[#404943] hover:bg-[#EBF0EC] transition-colors">
-                    ✨ 我想把事情做得更好
-                  </button>
-                  <button type="button" onclick="selectFuQuickOption('我需要有人聽我說說話')" class="text-xs px-3 py-1.5 rounded-full bg-white border border-[#D8CEBC] text-[#404943] hover:bg-[#EBF0EC] transition-colors">
-                    ☕ 我需要有人聽我說說話
-                  </button>
-                </div>
-              </div>
-
-              <!-- 留言框 -->
-              <div>
-                <textarea 
-                  id="textarea-fu-msg" 
-                  rows="3" 
-                  placeholder="傅姐，我最近想跟你說……" 
-                  class="w-full p-3.5 rounded-xl bg-white border border-[#D8CEBC] text-[15px] text-[#232824] placeholder-[#A59D90] focus:outline-none focus:border-[#23412F] resize-none leading-relaxed"
-                ></textarea>
-              </div>
-
-              <!-- 送出按鈕 -->
-              <div class="flex items-center justify-between pt-1">
-                <span class="text-[11px] text-[#8C938D]">
-                  桌邊小便箋 · 傅姐親自查看
-                </span>
-
-                <button 
-                  type="button" 
-                  onclick="handleFuMessageSubmit()" 
-                  class="h-12 px-6 rounded-full bg-[#23412F] hover:bg-[#182E21] text-[#FAF6F0] text-xs sm:text-[13.5px] font-medium transition-transform active:scale-95 shadow-2xs"
-                >
-                  把這句話留給傅姐
-                </button>
-              </div>
+            <!-- 傅姐便箋桌：寫便箋 / 查回信 頁籤切換 -->
+            <div class="flex items-center gap-2 border-b border-[#E5DAC9] pb-2.5">
+              <button 
+                type="button" 
+                id="btn-fu-tab-write" 
+                onclick="switchFuDeskTab('write')" 
+                class="text-xs font-bold px-3.5 py-1.5 rounded-full bg-[#23412F] text-white transition-all shadow-2xs"
+              >
+                ✏️ 寫便箋給傅姐
+              </button>
+              <button 
+                type="button" 
+                id="btn-fu-tab-inbox" 
+                onclick="switchFuDeskTab('inbox')" 
+                class="text-xs font-medium px-3.5 py-1.5 rounded-full bg-white border border-[#D5C9B8] text-[#5E6660] hover:text-[#23412F] transition-all flex items-center gap-1.5"
+              >
+                <span>💌 傅姐給我的回信</span>
+                <span id="fu-reply-count-badge" class="hidden px-1.5 py-0.2 rounded-full bg-[#D98C86] text-white text-[10px] font-bold">新</span>
+              </button>
             </div>
 
-            <!-- 狀況 A：留言成功確認（絕對無 AI 即時自動回覆） -->
-            <div id="fu-success-confirmation" class="hidden p-5 rounded-2xl bg-white border border-[#D8CEBC] text-center space-y-2">
-              <div class="w-10 h-10 rounded-full bg-[#EBF0EC] text-[#23412F] mx-auto flex items-center justify-center font-bold text-base">
-                ✓
-              </div>
-              <div class="font-serif-tc text-[18px] font-bold text-[#23412F]">
-                已經替你留好了。
-              </div>
-              <p class="text-[14px] text-[#5E6660] leading-relaxed">
-                傅姐會在合適的時候，找你聊聊。
-              </p>
-              <div class="pt-2">
-                <button 
-                  type="button" 
-                  onclick="resetFuInputForm()" 
-                  class="text-xs text-[#93A68D] hover:text-[#23412F] underline underline-offset-4"
-                >
-                  想再寫一張便箋？
-                </button>
-              </div>
-            </div>
-
-            <!-- 狀況 B：Supabase 尚未設定時的嚴格防呆提示（絕不假裝送達！） -->
-            <div id="fu-not-configured-alert" class="hidden p-4 rounded-2xl bg-[#FFF8EB] border border-[#EED7A1] space-y-2.5 text-left">
-              <div class="flex items-start gap-2">
-                <span class="text-base text-[#CBAE86]">⚠️</span>
+            <!-- 面板一：寫便箋給傅姐 -->
+            <div id="fu-write-panel" class="space-y-3">
+              <!-- 便箋留言表單 -->
+              <div id="fu-form-container" class="space-y-3">
+                
+                <!-- 名字或暱稱 -->
                 <div>
-                  <div class="text-xs font-bold text-[#684C12]">目前留言功能還在設定中。</div>
-                  <p class="text-xs text-[#7A612A] mt-0.5 leading-relaxed">
-                    你可以先把這段話複製保存，稍後再留給傅姐。
+                  <div class="flex items-center justify-between mb-1">
+                    <label class="text-xs font-bold text-[#23412F]">你的名字或暱稱：</label>
+                    <span class="text-[10px] text-[#CBAE86] font-medium">※ 查回信需使用同一名字</span>
+                  </div>
+                  <input 
+                    id="input-partner-name" 
+                    type="text" 
+                    placeholder="例：台南阿倫、小雅（請填固定好記的稱呼）" 
+                    class="w-full h-11 px-3.5 rounded-xl border border-[#D5C9B8] bg-white text-[15px] text-[#232824] placeholder-[#A59D90] focus:outline-none focus:border-[#23412F]"
+                  />
+                  <p class="text-[10.5px] text-[#8C938D] mt-1 leading-normal">
+                    💡 請填寫平常在團隊大家熟悉的稱呼，傅姐認得出來，日後查回信才找得到喔！
                   </p>
                 </div>
+
+                <!-- 快速選項 -->
+                <div>
+                  <div class="text-xs text-[#5E6660] font-medium mb-1.5">快速點選心情：</div>
+                  <div class="flex flex-wrap gap-1.5">
+                    <button type="button" onclick="selectFuQuickOption('我有點卡住了')" class="text-xs px-3 py-1.5 rounded-full bg-white border border-[#D8CEBC] text-[#404943] hover:bg-[#EBF0EC] transition-colors">
+                      🌱 我有點卡住了
+                    </button>
+                    <button type="button" onclick="selectFuQuickOption('我想把事情做得更好')" class="text-xs px-3 py-1.5 rounded-full bg-white border border-[#D8CEBC] text-[#404943] hover:bg-[#EBF0EC] transition-colors">
+                      ✨ 我想把事情做得更好
+                    </button>
+                    <button type="button" onclick="selectFuQuickOption('我需要有人聽我說說話')" class="text-xs px-3 py-1.5 rounded-full bg-white border border-[#D8CEBC] text-[#404943] hover:bg-[#EBF0EC] transition-colors">
+                      ☕ 我需要有人聽我說說話
+                    </button>
+                  </div>
+                </div>
+
+                <!-- 留言框 -->
+                <div>
+                  <textarea 
+                    id="textarea-fu-msg" 
+                    rows="3" 
+                    placeholder="傅姐，我最近想跟你說……" 
+                    class="w-full p-3.5 rounded-xl bg-white border border-[#D8CEBC] text-[15px] text-[#232824] placeholder-[#A59D90] focus:outline-none focus:border-[#23412F] resize-none leading-relaxed"
+                  ></textarea>
+                </div>
+
+                <!-- 送出按鈕 -->
+                <div class="flex items-center justify-between pt-1">
+                  <span class="text-[11px] text-[#8C938D]">
+                    桌邊小便箋 · 傅姐親自查看
+                  </span>
+
+                  <button 
+                    type="button" 
+                    onclick="handleFuMessageSubmit()" 
+                    class="h-12 px-6 rounded-full bg-[#23412F] hover:bg-[#182E21] text-[#FAF6F0] text-xs sm:text-[13.5px] font-medium transition-transform active:scale-95 shadow-2xs"
+                  >
+                    把這句話留給傅姐
+                  </button>
+                </div>
               </div>
-              <div class="flex items-center gap-2 pt-1">
-                <button 
-                  type="button" 
-                  onclick="copyMyUnsentMessage()" 
-                  class="h-10 px-4 rounded-full bg-[#684C12] text-white text-xs font-medium"
-                >
-                  複製我的留言
-                </button>
-                <button 
-                  type="button" 
-                  onclick="openAdminModal()" 
-                  class="h-10 px-3 rounded-full bg-white border border-[#D5C9B8] text-xs text-[#5E6660]"
-                >
-                  管理員綁定 Supabase
-                </button>
+
+              <!-- 狀況 A：留言成功確認（絕對無 AI 即時自動回覆） -->
+              <div id="fu-success-confirmation" class="hidden p-5 rounded-2xl bg-white border border-[#D8CEBC] text-center space-y-2">
+                <div class="w-10 h-10 rounded-full bg-[#EBF0EC] text-[#23412F] mx-auto flex items-center justify-center font-bold text-base">
+                  ✓
+                </div>
+                <div class="font-serif-tc text-[18px] font-bold text-[#23412F]">
+                  已經替你留好了。
+                </div>
+                <p class="text-[14px] text-[#5E6660] leading-relaxed">
+                  傅姐會在合適的時候，為你寫下溫暖回覆或找你聊聊。
+                </p>
+                <div class="pt-2 flex items-center justify-center gap-4 text-xs">
+                  <button 
+                    type="button" 
+                    onclick="resetFuInputForm()" 
+                    class="text-[#93A68D] hover:text-[#23412F] underline underline-offset-4"
+                  >
+                    想再寫一張便箋？
+                  </button>
+                  <button 
+                    type="button" 
+                    onclick="switchFuDeskTab('inbox')" 
+                    class="text-[#23412F] font-bold hover:underline"
+                  >
+                    💌 去看傅姐的回信 ➔
+                  </button>
+                </div>
+              </div>
+
+              <!-- 狀況 B：Supabase 尚未設定時的嚴格防呆提示 -->
+              <div id="fu-not-configured-alert" class="hidden p-4 rounded-2xl bg-[#FFF8EB] border border-[#EED7A1] space-y-2.5 text-left">
+                <div class="flex items-start gap-2">
+                  <span class="text-base text-[#CBAE86]">⚠️</span>
+                  <div>
+                    <div class="text-xs font-bold text-[#684C12]">目前留言功能還在設定中。</div>
+                    <p class="text-xs text-[#7A612A] mt-0.5 leading-relaxed">
+                      你可以先把這段話複製保存，稍後再留給傅姐。
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 pt-1">
+                  <button 
+                    type="button" 
+                    onclick="copyMyUnsentMessage()" 
+                    class="h-10 px-4 rounded-full bg-[#684C12] text-white text-xs font-medium"
+                  >
+                    複製我的留言
+                  </button>
+                  <button 
+                    type="button" 
+                    onclick="openAdminModal()" 
+                    class="h-10 px-3 rounded-full bg-white border border-[#D5C9B8] text-xs text-[#5E6660]"
+                  >
+                    管理員綁定 Supabase
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 面板二：💌 傅姐給我的回信查閱面板 -->
+            <div id="fu-inbox-panel" class="hidden space-y-3">
+              <div class="p-3.5 rounded-2xl bg-white border border-[#D5C9B8] space-y-2.5 shadow-2xs">
+                <div class="flex items-center justify-between">
+                  <label class="text-xs font-bold text-[#23412F] flex items-center gap-1">
+                    <span>🔍</span>
+                    <span>查看傅姐給我的回信：</span>
+                  </label>
+                  <span class="text-[10px] text-[#CBAE86] font-medium">需與留便箋時的名字一致</span>
+                </div>
+                <div class="flex gap-2">
+                  <input 
+                    id="input-check-partner-name" 
+                    type="text" 
+                    placeholder="請輸入當初留便箋時填寫的同一名字" 
+                    class="flex-1 h-10 px-3 rounded-xl border border-[#D5C9B8] bg-[#FAF8F5] text-xs text-[#232824] focus:outline-none focus:border-[#23412F]"
+                  />
+                  <button 
+                    type="button" 
+                    onclick="checkMyPartnerReplies()" 
+                    class="h-10 px-4 rounded-xl bg-[#23412F] text-white text-xs font-medium active:scale-95 shadow-2xs"
+                  >
+                    查回信
+                  </button>
+                </div>
+                <p class="text-[10.5px] text-[#8C938D] leading-normal">
+                  💡 系統已自動為你帶入此手機上次填寫的名字；若是換了手機，請輸入與留言時完全相同的稱呼。
+                </p>
+              </div>
+
+              <!-- 回信便箋列表 -->
+              <div id="fu-replies-list" class="space-y-3">
+                <div class="text-xs text-center py-6 text-[#8C938D] bg-white rounded-2xl border border-[#EDE4D6]">
+                  輸入你的名字並點擊「查回信」，就能看見傅姐親手為你寫的專屬叮嚀便箋
+                </div>
               </div>
             </div>
 
@@ -1711,6 +1797,16 @@
         }
       }
 
+      // 讀取本機暫存便箋（方便測試或離線查閱）
+      try {
+        const localMsgs = JSON.parse(localStorage.getItem('fit21_local_messages') || '[]');
+        localMsgs.forEach(lm => {
+          if (!messages.some(m => m.id === lm.id)) {
+            messages.push(lm);
+          }
+        });
+      } catch(e) {}
+
       // 如果尚未配置或暫無資料，提供示範卡片讓傅姐看懂界面與備註操作
       if (messages.length === 0) {
         messages = [
@@ -1722,7 +1818,9 @@
             source_question: '我站在門口很久，就是跨不出去',
             message: '傅姐，我今天站在店門口大概20分鐘，看著人來人往，就是不敢遞出試飲杯，覺得自己有點挫折。',
             status: '待關心',
-            private_note: '週二下午打電話聊聊開口第一秒的呼吸與放鬆'
+            private_note: '週二下午打電話聊聊開口第一秒的呼吸與放鬆',
+            reply_text: '阿倫，不用氣餒！每個人一開始站在門口都會心跳加速。跨不出去是正常的，今天下午你來店裡，我調杯好喝的，我們從最簡單的微笑開始練習！',
+            replied_at: new Date(Date.now() - 3600000).toISOString()
           }
         ];
       }
@@ -1749,7 +1847,7 @@
       }
 
       list.forEach(item => {
-        const d = new Date(item.created_at);
+        const d = new Date(item.created_at || Date.now());
         const timeStr = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
         const isDone = item.status === '已聯絡';
 
@@ -1757,7 +1855,7 @@
         card.className = 'bg-white rounded-2xl p-4 border border-[#E0D7C9] space-y-2.5 text-xs shadow-2xs';
         card.innerHTML = `
           <div class="flex items-center justify-between">
-            <span class="font-bold text-[#23412F] text-[14px]">${item.name}</span>
+            <span class="font-bold text-[#23412F] text-[14.5px]">${item.name}</span>
             <span class="text-[10.5px] text-[#8C938D]">${timeStr}</span>
           </div>
 
@@ -1777,7 +1875,7 @@
             >
               ${isDone ? '✓ 已聯絡' : '⏳ 待關心 (點擊切換)'}
             </button>
-            <span class="text-[10px] text-[#8C938D]">傅姐私密筆記 (前台不可見)</span>
+            <span class="text-[10px] text-[#8C938D]">傅姐私密筆記 (僅自己可見)</span>
           </div>
 
           <div>
@@ -1789,9 +1887,91 @@
               class="w-full h-8 px-2.5 rounded-lg border border-[#D5C9B8] bg-[#FAF8F5] text-xs text-[#232824]"
             />
           </div>
+
+          <!-- 傅姐直接回信區塊（B方案：前台夥伴查信可見） -->
+          <div class="mt-2 p-3 rounded-xl bg-[#FAF5EC] border border-[#E5DAC9] space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-[#684C12] text-[11.5px] flex items-center gap-1">
+                <span>💌</span>
+                <span>回覆 ${item.name}（前台可見）：</span>
+              </span>
+              <span class="text-[10px] ${item.reply_text ? 'text-emerald-700 font-semibold' : 'text-[#8C938D]'}">
+                ${item.reply_text ? '✓ 已回覆' : '尚未回信'}
+              </span>
+            </div>
+            <textarea 
+              id="reply-input-${item.id}"
+              rows="2"
+              placeholder="寫下您想給 ${item.name} 的溫暖叮嚀或下一步建議..."
+              class="w-full p-2 rounded-lg border border-[#D8CEBC] bg-white text-xs text-[#232824] placeholder-[#A59D90] resize-none focus:outline-none focus:border-[#23412F]"
+            >${item.reply_text || ''}</textarea>
+            <div class="flex items-center justify-between pt-0.5">
+              <span class="text-[10px] text-[#8C938D]">
+                ${item.replied_at ? `已於 ${new Date(item.replied_at).toLocaleDateString()} 送出` : '送出後夥伴可在前台查信'}
+              </span>
+              <button 
+                type="button" 
+                onclick="submitAdminReply('${item.id}', '${item.name ? item.name.replace(/'/g, "\\'") : '夥伴'}')"
+                class="px-3.5 py-1.5 rounded-full bg-[#23412F] hover:bg-[#182E21] text-white text-[11px] font-medium transition-transform active:scale-95 shadow-2xs"
+              >
+                ${item.reply_text ? '更新回信' : '傳送回信'}
+              </button>
+            </div>
+          </div>
         `;
         container.appendChild(card);
       });
+    }
+
+    async function submitAdminReply(id, partnerName) {
+      const input = document.getElementById(`reply-input-${id}`);
+      if (!input) return;
+      const replyText = input.value.trim();
+      if (!replyText) {
+        alert('請先輸入回信內容喔！');
+        return;
+      }
+
+      const env = getSupabaseEnv();
+      const nowIso = new Date().toISOString();
+
+      if (env.isConfigured && !id.startsWith('mock_')) {
+        try {
+          await fetch(`${env.url}/rest/v1/partner_messages?id=eq.${id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': env.key,
+              'Authorization': `Bearer ${env.key}`
+            },
+            body: JSON.stringify({ 
+              reply_text: replyText, 
+              replied_at: nowIso, 
+              status: '已聯絡' 
+            })
+          });
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      // 同步更新 local messages 暫存
+      try {
+        const localMsgs = JSON.parse(localStorage.getItem('fit21_local_messages') || '[]');
+        const target = localMsgs.find(m => m.id === id);
+        if (target) {
+          target.reply_text = replyText;
+          target.replied_at = nowIso;
+          target.status = '已聯絡';
+          localStorage.setItem('fit21_local_messages', JSON.stringify(localMsgs));
+        } else {
+          localMsgs.push({ id, name: partnerName, reply_text: replyText, replied_at: nowIso, status: '已聯絡' });
+          localStorage.setItem('fit21_local_messages', JSON.stringify(localMsgs));
+        }
+      } catch(e) {}
+
+      showToast(`已成功送出回信給「${partnerName}」！`);
+      loadAdminStream();
     }
 
     async function toggleAdminItemStatus(id, newStatus) {
@@ -1833,6 +2013,148 @@
         }
       }
       showToast('已保存傅姐私密備註');
+    }
+
+    // ==============================================
+    // 傅姐便箋桌：寫信 / 查回信 (B方案) 雙向互動
+    // ==============================================
+    function switchFuDeskTab(tab) {
+      const writePanel = document.getElementById('fu-write-panel');
+      const inboxPanel = document.getElementById('fu-inbox-panel');
+      const btnWrite = document.getElementById('btn-fu-tab-write');
+      const btnInbox = document.getElementById('btn-fu-tab-inbox');
+
+      if (tab === 'write') {
+        writePanel.classList.remove('hidden');
+        inboxPanel.classList.add('hidden');
+        btnWrite.className = 'text-xs font-bold px-3.5 py-1.5 rounded-full bg-[#23412F] text-white transition-all shadow-2xs';
+        btnInbox.className = 'text-xs font-medium px-3.5 py-1.5 rounded-full bg-white border border-[#D5C9B8] text-[#5E6660] hover:text-[#23412F] transition-all flex items-center gap-1.5';
+      } else {
+        writePanel.classList.add('hidden');
+        inboxPanel.classList.remove('hidden');
+        btnInbox.className = 'text-xs font-bold px-3.5 py-1.5 rounded-full bg-[#23412F] text-white transition-all shadow-2xs flex items-center gap-1.5';
+        btnWrite.className = 'text-xs font-medium px-3.5 py-1.5 rounded-full bg-white border border-[#D5C9B8] text-[#5E6660] hover:text-[#23412F] transition-all';
+        
+        // 自動帶入上次填過的名字
+        const savedName = localStorage.getItem('fit21_my_name') || '';
+        if (savedName) {
+          document.getElementById('input-check-partner-name').value = savedName;
+          checkMyPartnerReplies(savedName);
+        }
+      }
+    }
+
+    async function checkMyPartnerReplies(targetName) {
+      const name = (targetName || document.getElementById('input-check-partner-name').value).trim();
+      const listContainer = document.getElementById('fu-replies-list');
+      if (!name) {
+        listContainer.innerHTML = '<div class="text-xs text-center py-4 text-[#D98C86]">請先輸入你的名字或暱稱喔！</div>';
+        return;
+      }
+      localStorage.setItem('fit21_my_name', name);
+      listContainer.innerHTML = '<div class="text-xs text-center py-4 text-[#8C938D]">正在查詢傅姐的回信……</div>';
+
+      const env = getSupabaseEnv();
+      let matched = [];
+
+      if (env.isConfigured) {
+        try {
+          const resp = await fetch(`${env.url}/rest/v1/partner_messages?name=ilike.${encodeURIComponent(name)}&order=created_at.desc`, {
+            headers: {
+              'apikey': env.key,
+              'Authorization': `Bearer ${env.key}`
+            }
+          });
+          if (resp.ok) {
+            matched = await resp.json();
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      // 合併本機暫存便箋（支援不分大小寫比對）
+      try {
+        const localMsgs = JSON.parse(localStorage.getItem('fit21_local_messages') || '[]');
+        const localMatches = localMsgs.filter(m => m.name && m.name.trim().toLowerCase() === name.toLowerCase());
+        localMatches.forEach(lm => {
+          if (!matched.some(m => m.id === lm.id)) {
+            matched.push(lm);
+          }
+        });
+      } catch(e) {}
+
+      // 如果查無紀錄且是示範姓名
+      if (matched.length === 0 && name.includes('阿倫')) {
+        matched = [
+          {
+            id: 'mock_demo_1',
+            created_at: new Date(Date.now() - 7200000).toISOString(),
+            name: '阿倫',
+            message: '傅姐，我今天站在店門口大概20分鐘，看著人來人往，就是不敢遞出試飲杯，覺得自己有點挫折。',
+            reply_text: '阿倫，不用氣餒！每個人一開始站在門口都會心跳加速。跨不出去是正常的，今天下午你來店裡，我調杯好喝的，我們從最簡單的微笑開始練習！',
+            replied_at: new Date(Date.now() - 3600000).toISOString()
+          }
+        ];
+      }
+
+      if (matched.length === 0) {
+        listContainer.innerHTML = `
+          <div class="p-4 rounded-2xl bg-white border border-[#E5DAC9] text-center space-y-2">
+            <p class="text-xs text-[#5E6660]">還沒有找到署名「<strong>${name}</strong>」的便箋紀錄喔！</p>
+            <p class="text-[11px] text-[#A59D90]">💡 請確認是否與當初留便箋時填寫的稱呼完全一致（例如：小雅 / 台南阿倫）。</p>
+            <button type="button" onclick="switchFuDeskTab('write')" class="text-xs text-[#23412F] underline font-medium">👉 現在去寫一張便箋給傅姐</button>
+          </div>
+        `;
+        return;
+      }
+
+      listContainer.innerHTML = '';
+      matched.forEach(item => {
+        const d = new Date(item.created_at || Date.now());
+        const timeStr = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+
+        const card = document.createElement('div');
+        card.className = 'p-4 rounded-2xl bg-white border border-[#D8CEBC] space-y-3 shadow-2xs';
+        
+        let replyHtml = '';
+        if (item.reply_text) {
+          const rd = item.replied_at ? new Date(item.replied_at) : new Date();
+          const replyTime = `${rd.getMonth()+1}/${rd.getDate()} ${String(rd.getHours()).padStart(2,'0')}:${String(rd.getMinutes()).padStart(2,'0')}`;
+          replyHtml = `
+            <div class="p-3.5 rounded-xl bg-[#FAF5EC] border border-[#E8DCB8] space-y-1.5">
+              <div class="flex items-center justify-between text-xs font-bold text-[#23412F]">
+                <span class="flex items-center gap-1.5">
+                  <span>☕</span>
+                  <span>傅姐的溫暖回信：</span>
+                </span>
+                <span class="text-[10px] text-[#8C938D] font-normal">${replyTime}</span>
+              </div>
+              <p class="text-[14px] text-[#232824] leading-relaxed font-serif-tc whitespace-pre-wrap pt-0.5">
+                ${item.reply_text}
+              </p>
+            </div>
+          `;
+        } else {
+          replyHtml = `
+            <div class="p-3 rounded-xl bg-[#FAF8F5] border border-[#EDE4D6] text-center text-xs text-[#CBAE86]">
+              ⏳ 傅姐已經收到你的這張便箋囉！正在細心閱讀中，請稍後再來看看回信～
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between text-[11px] text-[#8C938D] pb-1 border-b border-[#F2ECE1]">
+            <span>你留下的便箋</span>
+            <span>${timeStr}</span>
+          </div>
+          <p class="text-xs text-[#5E6660] italic leading-relaxed bg-[#FAF8F5] p-2.5 rounded-xl border border-[#EDE4D6]">
+            「${item.message}」
+          </p>
+          ${replyHtml}
+        `;
+        listContainer.appendChild(card);
+      });
     }
   </script>
 </body>
